@@ -1,0 +1,7 @@
+development:
+  password: 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
+  theme_id: "83345965119"
+  timeout: 600s
+  store: brutal-truth.myshopify.com
+  ignore_files:
+    - settings_data.json
