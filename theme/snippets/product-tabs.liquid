@@ -96,6 +96,25 @@
             {{ tab_contents[forloop.index0] }}
           </div>
         {%- endfor -%}
+      {%- elsif block.type == "tab_metafields"  -%}
+        {%- liquid
+          assign metafields = product.metafields.c_f
+          assign number_tab = metafields.tab_title.size | minus: 1
+        -%}
+
+        {%- for i in (0..number_tab) -%}
+          {%- if metafields.tab_title[i] != blank and metafields.tab_content[i] != blank -%}
+            <p class="accordion-toggle">
+                {{metafields.tab_title[i]}}
+              <span class="oi small accordion__icon" data-glyph="chevron-right"></span>
+            </p>
+            <div class="rte accordion-content">
+              {{metafields.tab_content[i]}}
+            </div>
+          {%- endif -%}
+
+        {%- endfor -%}
+
       {%- else -%}
         <p class="accordion-toggle" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
           {{ block.settings.title }}
@@ -112,23 +131,7 @@
       {%- endif -%}
     {%- endfor -%}
 
-    {%- liquid
-      assign metafields = product.metafields.c_f
-      assign number_tab = metafields.tab_title.size | minus: 1
-    -%}
 
-    {%- for i in (0..number_tab) -%}
-      {%- if metafields.tab_title[i] != blank and metafields.tab_content[i] != blank -%}
-        <p class="accordion-toggle">
-            {{metafields.tab_title[i]}}
-          <span class="oi small accordion__icon" data-glyph="chevron-right"></span>
-        </p>
-        <div class="rte accordion-content">
-          {{metafields.tab_content[i]}}
-        </div>
-      {%- endif -%}
-
-    {%- endfor -%}
 
   </div>
 </div>
