@@ -87,6 +87,23 @@
                   {%- if block.settings.icon_svg != blank-%}
                     <div class="column__icon">{{block.settings.icon_svg}}</div>
                   {%- endif -%}
+                {%- when 'image' -%}
+                  {% assign img_url = block.settings.icon_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                  <div class="column__icom">
+                    <div class="lazy-image" style="padding-top:{{ 1 | divided_by: block.settings.icon_image.aspect_ratio | times: 100}}%; background-image:  url('{{ block.settings.icon_image | img_url: '1x1' }}');">
+                      <img class="lazyload fade-in"
+                        alt="{{ block.settings.icon_image.alt }}"
+                        data-aos="img-in"
+                        data-aos-delay="{{ forloop.index0 | times: 150 }}"
+                        data-aos-duration="{{ forloop.index0 | times: 100 | plus: 800 }}"
+                        data-aos-easing="ease-out-quart"
+                        data-src="{{ img_url }}"
+                        data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2450, 2700, 3000, 3350, 3750, 4100]"
+                        data-aspectratio="{{  block.settings.icon_image.aspect_ratio }}"
+                        data-parent-fit="cover"
+                        data-sizes="auto"/>
+                    </div>
+                  </div>
               {%- endcase -%}
 
               {% if block.settings.title != blank %}

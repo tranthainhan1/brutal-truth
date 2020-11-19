@@ -26,7 +26,7 @@
       <img src="{{ section.settings.footer_logo | img_url: 'x200' }}" alt="{{ section.settings.footer_logo.alt | default: shop.name }}" id="footerLogoImg-{{ section.id }}"/>
     </a>
     {% endif %}
-    <div class="grid grid--uniform">
+    <div class="grid grid--uniform footer-top">
 
       {% case section.blocks.size %}
         {% when 0 %}
@@ -46,7 +46,7 @@
           {% when 'linklist' %}
             {% assign linklist = linklists[block.settings.linklist] %}
             <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-              <h2 class="h5 footer__block__title caps">{{ linklist.title }} </h2>
+              <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ linklist.title }} </h2>
               <hr>
               <ul class="footer__quicklinks unstyled">
                 {% for link in linklist.links %}
@@ -59,13 +59,13 @@
             {% assign page = pages[block.settings.page] %}
             {% if page == blank or page.empty? %}
               <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-                <h2 class="h5 footer__block__title caps">{{ shop.name }}</h2>
+                <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ shop.name }}</h2>
                 <hr>
                 <div class="rte">{{ 'home_page.onboarding.no_content' | t }}</div>
               </div>
             {% else %}
               <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-                <h2 class="h5 footer__block__title caps">{{ page.title | escape }}</h2>
+                <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ page.title | escape }}</h2>
                 <hr>
                 <div class="rte">{{ page.content }}</div>
               </div>
@@ -74,7 +74,7 @@
           {% when 'social' %}
             <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
               {%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Tumblr, YouTube, Vimeo,' | split: ', ' -%}
-              <h2 class="h5 footer__block__title caps">{{ block.settings.title | escape }}</h2>
+              <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ block.settings.title | escape }}</h2>
               <hr>
               {% if block.settings.richtext != '<p></p>' %}
                 <div class="rte footer__social__text">
@@ -88,14 +88,14 @@
 
           {% when 'text' %}
             <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-              <h2 class="h5 footer__block__title caps">{{ block.settings.title | escape }}</h2>
+              <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ block.settings.title | escape }}</h2>
               <hr>
               <div class="rte">{{ block.settings.text }}</div>
             </div>
 
           {% when 'newsletter' %}
             <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-              <h2 class="h5 footer__block__title caps">{{ 'layout.footer.newsletter_title' | t }}</h2>
+              <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ 'layout.footer.newsletter_title' | t }}</h2>
               <hr>
               <div class="rte footer__newsletter__text">
                 {{ block.settings.richtext }}
@@ -124,62 +124,84 @@
       {% endfor %}
     </div>
 
-    <div class="grid">
-      <div class="footer__secondary grid__item {% if section.settings.footer_payment_enable %}medium-up--two-thirds{% endif %}">
+    <div class="grid footer-bottom">
+    {% comment %} grid__item {% if section.settings.footer_payment_enable %}medium-up--two-thirds{% endif %} {% endcomment %}
+      <div class="footer__secondary">
+        <div class="left-content">
+          {%- form 'localization', class: 'popout--footer' -%}
+            {%- if section.settings.show_locale_selector and shop.published_locales.size > 0 -%}
+              <div>
+                <h2 class="visually-hidden" id="lang-heading">
+                  {{ 'layout.footer.language' | t }}
+                </h2>
+                <div class="popout" data-popout-locale>
+                  <button type="button" class="popout__toggle" aria-expanded="false" aria-controls="lang-list" aria-describedby="lang-heading" data-popout-toggle>
+                    {{ form.current_locale.endonym_name }}
+                    {%- render 'icon-select' -%}
+                  </button>
+                  <ul id="lang-list" class="popout-list" data-popout-list>
+                    {% for locale in form.available_locales %}
+                      <li class="popout-list__item {% if locale.iso_code == form.current_locale.iso_code %}popout-list__item--current{% endif %}">
+                        <a class="popout-list__option" href="#" lang="{{ locale.iso_code }}" {% if locale.iso_code == form.current_locale.iso_code %}aria-current="true"{% endif %} data-value="{{ locale.iso_code }}" data-popout-option>
+                          <span>{{ locale.endonym_name }}</span>
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                  <input type="hidden" name="locale_code" id="LocaleSelector" value="{{ form.current_locale.iso_code }}" data-popout-input/>
+                </div>
+              </div>
+            {%- endif -%}
 
-        <!-- /partials/cross-border.liquid -->
-{%- form 'localization', class: 'popout--footer' -%}
-  {%- if section.settings.show_locale_selector and shop.published_locales.size > 1 -%}
-    <div>
-      <h2 class="visually-hidden" id="lang-heading">
-        {{ 'layout.footer.language' | t }}
-      </h2>
-      <div class="popout" data-popout-locale>
-        <button type="button" class="popout__toggle" aria-expanded="false" aria-controls="lang-list" aria-describedby="lang-heading" data-popout-toggle>
-          {{ form.current_locale.endonym_name }}
-          {%- render 'icon-select' -%}
-        </button>
-        <ul id="lang-list" class="popout-list" data-popout-list>
-          {% for locale in form.available_locales %}
-            <li class="popout-list__item {% if locale.iso_code == form.current_locale.iso_code %}popout-list__item--current{% endif %}">
-              <a class="popout-list__option" href="#" lang="{{ locale.iso_code }}" {% if locale.iso_code == form.current_locale.iso_code %}aria-current="true"{% endif %} data-value="{{ locale.iso_code }}" data-popout-option>
-                <span>{{ locale.endonym_name }}</span>
-              </a>
-            </li>
-          {%- endfor -%}
-        </ul>
-        <input type="hidden" name="locale_code" id="LocaleSelector" value="{{ form.current_locale.iso_code }}" data-popout-input/>
-      </div>
-    </div>
-  {%- endif -%}
+            {%- if section.settings.show_currency_selector and shop.enabled_currencies.size > 1 -%}
+              <div>
+                <h2 class="visually-hidden" id="currency-heading">
+                  {{ 'layout.footer.currency' | t }}
+                </h2>
+                <div class="popout" data-popout-currency>
+                  <button type="button" class="popout__toggle" aria-expanded="false" aria-controls="currency-list" aria-describedby="currency-heading" data-popout-toggle>
+                    {{ form.current_currency.iso_code }} {%- if form.current_currency.symbol -%}{{ form.current_currency.symbol }}{%- endif -%}
+                    {%- render 'icon-select' -%}
+                  </button>
+                  <ul id="currency-list" class="popout-list" data-popout-list>
+                    {% for currency in form.available_currencies %}
+                      <li class="popout-list__item {% if currency.iso_code == form.current_currency.iso_code %}popout-list__item--current{% endif %}">
+                        <a class="popout-list__option" href="#" {% if currency.iso_code == form.current_currency.iso_code %}aria-current="true"{% endif %} data-value="{{ currency.iso_code }}" data-popout-option>
+                          <span>{{ currency.iso_code }} {%- if currency.symbol -%}{{ currency.symbol }}{%- endif -%}</span>
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                  <input type="hidden" name="currency_code" id="CurrencySelector" value="{{ form.current_currency.iso_code }}" data-popout-input/>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endform -%}
 
-  {%- if section.settings.show_currency_selector and shop.enabled_currencies.size > 1 -%}
-    <div>
-      <h2 class="visually-hidden" id="currency-heading">
-        {{ 'layout.footer.currency' | t }}
-      </h2>
-      <div class="popout" data-popout-currency>
-        <button type="button" class="popout__toggle" aria-expanded="false" aria-controls="currency-list" aria-describedby="currency-heading" data-popout-toggle>
-          {{ form.current_currency.iso_code }} {%- if form.current_currency.symbol -%}{{ form.current_currency.symbol }}{%- endif -%}
-          {%- render 'icon-select' -%}
-        </button>
-        <ul id="currency-list" class="popout-list" data-popout-list>
-          {% for currency in form.available_currencies %}
-            <li class="popout-list__item {% if currency.iso_code == form.current_currency.iso_code %}popout-list__item--current{% endif %}">
-              <a class="popout-list__option" href="#" {% if currency.iso_code == form.current_currency.iso_code %}aria-current="true"{% endif %} data-value="{{ currency.iso_code }}" data-popout-option>
-                <span>{{ currency.iso_code }} {%- if currency.symbol -%}{{ currency.symbol }}{%- endif -%}</span>
-              </a>
-            </li>
-          {%- endfor -%}
-        </ul>
-        <input type="hidden" name="currency_code" id="CurrencySelector" value="{{ form.current_currency.iso_code }}" data-popout-input/>
-      </div>
-    </div>
-  {%- endif -%}
-{%- endform -%}
+          <ul class="footer__secondary__nav">
+            {% for link in linklists[section.settings.footer_secondary_linklist].links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
 
+        <div class="right-content">
+          {% if section.settings.footer_payment_enable %}
+            {% unless shop.enabled_payment_types == empty %}
+            {% comment %} grid__item inline-list grid__item medium-up--one-third {% endcomment %}
+              <ul class="footer__payment payment-icons">
+                {% for type in shop.enabled_payment_types %}
+                  <li>{{ type | payment_type_svg_tag: class:'payment-icon' }}</li>
+                {% endfor %}
+              </ul>
+            {% endunless %}
+          {% endif %}
+          {%- if section.settings.show_copyright -%}
+            <div class="copyright"><span class="text">{{section.settings.copyright_text}}</span><a href="{{ shop.secure_url }}">&copy; {{ shop.name }} {{ 'now' | date: "%Y" }}</a></div>
+          {%- endif -%}
+        </div>
 
-        <ul class="footer__copyright inline-list unstyled">
+        {% comment %} <ul class="footer__copyright inline-list unstyled visually-hidden">
           <li>
             <a href="{{ shop.secure_url }}">&copy; {{ shop.name }} {{ 'now' | date: "%Y" }}</a>
           </li>
@@ -190,18 +212,10 @@
           <!-- Remove the following line to delete Shopify credit -->
           <li data-powered-link>{{ powered_by_link }}</li>
 
+        </ul> {% endcomment %}
 
-        </ul>
       </div>
-      {% if section.settings.footer_payment_enable %}
-        {% unless shop.enabled_payment_types == empty %}
-          <ul class="footer__payment payment-icons grid__item inline-list grid__item medium-up--one-third">
-            {% for type in shop.enabled_payment_types %}
-              <li>{{ type | payment_type_svg_tag: class:'payment-icon' }}</li>
-            {% endfor %}
-          </ul>
-        {% endunless %}
-      {% endif %}
+
 
     </div>
   </div>
@@ -295,6 +309,26 @@
       "id": "show_currency_selector",
       "label": "Show currency selector",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Copyright"
+      }
+    },
+    {
+      "type" : "checkbox",
+      "id" : "show_copyright",
+      "label" : {
+        "en": "Show copyright"
+      }
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": {
+        "en": "Text"
+      }
     }
   ],
   "blocks" : [
@@ -303,11 +337,38 @@
       "name": "Link list",
       "settings": [
         {
-           "type": "link_list",
-           "id": "linklist",
-           "label": "Link list",
-           "default": "footer",
-           "info": "This menu won't show dropdown items"
+          "type": "link_list",
+          "id": "linklist",
+          "label": "Link list",
+          "default": "footer",
+          "info": "This menu won't show dropdown items"
+        },
+        {
+          "type": "select",
+          "id": "heading_align",
+          "label" : {
+            "en" : "Heading alignment"
+          },
+          "options": [
+           {
+              "value": "left",
+              "label": {
+                "en": "Left"
+              }
+           },
+           {
+             "value": "center",
+             "label": {
+               "en": "Center"
+             }
+           },
+           {
+             "value": "right",
+             "label": {
+               "en": "Right"
+             }
+           }
+          ]
         }
       ]
     },
@@ -319,6 +380,33 @@
         {
           "type": "paragraph",
           "content": "Subscribers are under 'Accepts Marketing' in your [customer admin](/admin/customers)."
+        },
+        {
+          "type": "select",
+          "id": "heading_align",
+          "label" : {
+            "en" : "Heading alignment"
+          },
+          "options": [
+           {
+              "value": "left",
+              "label": {
+                "en": "Left"
+              }
+           },
+           {
+             "value": "center",
+             "label": {
+               "en": "Center"
+             }
+           },
+           {
+             "value": "right",
+             "label": {
+               "en": "Right"
+             }
+           }
+          ]
         },
         {
           "id": "richtext",
@@ -339,6 +427,33 @@
           "default": "Social"
         },
         {
+          "type": "select",
+          "id": "heading_align",
+          "label" : {
+            "en" : "Heading alignment"
+          },
+          "options": [
+           {
+              "value": "left",
+              "label": {
+                "en": "Left"
+              }
+           },
+           {
+             "value": "center",
+             "label": {
+               "en": "Center"
+             }
+           },
+           {
+             "value": "right",
+             "label": {
+               "en": "Right"
+             }
+           }
+          ]
+        },
+        {
           "type": "richtext",
           "id": "richtext",
           "label": "Text",
@@ -355,6 +470,33 @@
           "id": "title",
           "label": "Heading",
           "default": "Text"
+        },
+        {
+          "type": "select",
+          "id": "heading_align",
+          "label" : {
+            "en" : "Heading alignment"
+          },
+          "options": [
+           {
+              "value": "left",
+              "label": {
+                "en": "Left"
+              }
+           },
+           {
+             "value": "center",
+             "label": {
+               "en": "Center"
+             }
+           },
+           {
+             "value": "right",
+             "label": {
+               "en": "Right"
+             }
+           }
+          ]
         },
         {
           "type": "richtext",

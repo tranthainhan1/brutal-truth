@@ -15,11 +15,8 @@
 {%- endif -%}
 
 <header class="site-header header--{{ section.settings.header_style }} header__wrapper{% if header_overlay %} header--transparent{% endif %}" id="header" data-section-id="{{ section.id }}" data-section-type="header" data-overlay="{{ header_overlay }}">
-  {% if logoImageWidth > 0 %}
-    <style>
-      #logo a img { width: {{ logoImageWidth }}px; }
-    </style>
-  {% endif %}
+
+
 
   <!-- PROMO -->
   {% if section.settings.message %}
@@ -55,145 +52,6 @@
   {% endif %}
 
   <div class="header__content">
-    <div class="wrap">
-      {%- if section.settings.show_header_search -%}
-        <!-- /partials/search.liquid -->
-
-<div class="search">
-  <form class="search__form" method="get" action="{{ routes.search_url }}">
-    <input type="text" name="q"
-      value="{% if search.performed %}{{ search.terms | escape | downcase }}{% endif %}"
-      placeholder="{{ 'general.search.placeholder' | t }}"
-      aria-label="{{ 'general.search.placeholder' | t }}"
-      class="search-query"
-      tabindex="-1">
-    <input type="hidden" name="type" value="product">
-    <a href="#" class="remove-search" tabindex="-1">
-      <span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span>
-    </a>
-  </form>
-
-  <div class="search__results">
-    <div class="search__results-scroller">
-      <div class="search__results-container">
-        <div class="search-outer"></div>
-        <div class="search__results-list product-grid product-grid--results"></div>
-        <div class="loader loader--search">
-          <div class="loader-indeterminate"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-      {%- endif -%}
-      <!-- SEARCH, CURRENCY, ACCOUNT, CART -->
-      <div class="header-content">
-        {% if section.settings.show_header_social %}
-          <nav class="header__social">
-            <!-- /partials/social.liquid -->
-
-{% if settings.instagram_link != ''
-   or settings.pinterest_link != ''
-   or settings.facebook_link != ''
-   or settings.twitter_link != ''
-   or settings.youtube_link != ''
-   or settings.vimeo_link != ''
-   or settings.tumblr_link != ''
-   or settings.atom_link != '' %}
-	<ul class="clearfix social__links">
-	{% if settings.instagram_link != '' %}<li><a href="{{ settings.instagram_link }}" title="{{ shop.name }} on Instagram" rel="noopener" target="_blank">{% render 'icon-instagram' %}<span class="visually-hidden">Instagram</span></a></li>{% endif %}
-	{% if settings.pinterest_link != '' %}<li><a href="{{ settings.pinterest_link }}" title="{{ shop.name }} on Pinterest" rel="noopener" target="_blank">{% render 'icon-pinterest' %}<span class="visually-hidden">Pinterest</span></a></li>{% endif %}
-	{% if settings.facebook_link != '' %}<li><a href="{{ settings.facebook_link }}" title="{{ shop.name }} on Facebook" rel="noopener" target="_blank">{% render 'icon-facebook' %}<span class="visually-hidden">Facebook</span></a></li>{% endif %}
-	{% if settings.twitter_link != '' %}<li><a href="{{ settings.twitter_link }}" title="{{ shop.name }} on Twitter" rel="noopener" target="_blank">{% render 'icon-twitter' %}<span class="visually-hidden">Twitter</span></a></li>{% endif %}
-	{% if settings.youtube_link != '' %}<li><a href="{{ settings.youtube_link }}" title="{{ shop.name }} on YouTube" rel="noopener" target="_blank">{% render 'icon-youtube' %}<span class="visually-hidden">YouTube</span></a></li>{% endif %}
-	{% if settings.vimeo_link != '' %}<li><a href="{{ settings.vimeo_link }}" title="{{ shop.name }} on Vimeo" rel="noopener" target="_blank">{% render 'icon-vimeo' %}<span class="visually-hidden">Vimeo</span></a></li>{% endif %}
-	{% if settings.tumblr_link != '' %}<li><a href="{{ settings.tumblr_link }}" title="{{ shop.name }} on Tumblr" rel="noopener" target="_blank">{% render 'icon-tumblr' %}<span class="visually-hidden">Tumblr</span></a></li>{% endif %}
-	{% if settings.atom_link != '' %}<li><a href="{{ settings.atom_link }}" title="{{ shop.name }} Feed" rel="noopener" target="_blank">{% render 'icon-rss' %}<span class="visually-hidden">Feed</span></a></li>{% endif %}
-	</ul>
-{% endif %}
-
-          </nav>
-        {% endif %}
-
-        <!-- LOGO -->
-        <h1 class="logo__wrapper" id="logo" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="300">
-          <a href="{{ routes.root_url }}">
-            {% if section.settings.logo_image %}
-              {%- assign image = section.settings.logo_image -%}
-              {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
-              {%- assign image_height = section.settings.logo_image_width | divided_by: image.aspect_ratio | round | append: 'px' -%}
-              <img class="lazyload logo logo--default"
-                src="{{ image | img_url: '400x' }}"
-                data-src="{{ img_url }}"
-                data-widths="[180, 360, 540, 720, 900, 1080, 1296]"
-                data-aspectratio="{{ image.aspect_ratio }}"
-                data-sizes="auto"
-                data-parent-fit="contain"
-                style="height: {{ image_height }}"
-                alt="{{ shop.name | escape }}"/>
-
-                <noscript>
-                  <img class="no-js-image" src="{{ image | img_url: '400x' }}" alt="{{ shop.name | escape }}"/>
-                </noscript>
-                {% if header_overlay and section.settings.transparent_logo != blank %}
-                  {% capture image_size %}{{ section.settings.logo_image_width }}x{% endcapture %}
-                  <img src="{{ section.settings.transparent_logo | img_url: image_size }}"
-                       class="logo logo--transparent"
-                       srcset="{{ section.settings.transparent_logo | img_url: image_size }} 1x, {{ section.settings.transparent_logo | img_url: image_size, scale: 2 }} 2x"
-                       style="height: {{ image_height }}"
-                       alt="{{ section.settings.transparent_logo.alt | default: shop.name }}">
-                {% endif %}
-            {% else %}
-              <span>{{ shop.name | escape }}</span>
-            {% endif %}
-          </a>
-        </h1>
-
-        <div class="user-links">
-          {% if shop.customer_accounts_enabled and section.settings.show_account %}
-            <a href="{{ routes.account_url }}" class="header__account__link" id="account-link">
-              {% render 'icon-account' %}
-              <span class="visually-hidden">{{ 'customer.account.title' | t }}</span>
-            </a>
-          {% endif %}
-          {% if section.settings.show_header_search %}
-            <a href="javascript:void(0)" id="SearchToggle" title="{{ 'general.search.placeholder' | t }}">
-              <span class="search-toggle">
-                <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
-                <span class="oi" data-glyph="magnifying-glass"></span>
-              </span>
-            </a>
-          {% endif %}
-          <a href="{{ routes.cart_url }}" class="header__cart__wrapper" id="CartButton" title="{{ 'cart.general.title' | t }}">
-            <span class="header__cart__icon__wrapper">
-              <span class="visually-hidden">{{ 'layout.cart.title' | t }}</span>
-              <span class="oi header__cart__icon" data-glyph="cart"></span>
-              <span
-                class="cart-count-js header__cart__count"
-                {% if cart.item_count == 0 %}
-                  style="display: none;"
-                {% endif %}>
-                {{ cart.item_count }}
-              </span>
-            </span>
-          </a>
-        </div>
-
-        <a href="javascript:void(0)" class="medium-up--hide toggle-menus">
-          <div class="toggle-menus-lines">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <span class="visually-hidden">{{ 'layout.header.menu' | t }}</span>
-        </a>
-      </div>
-
-    </div>
 
     <!-- MAIN NAV -->
     <section id="NavMenus" class="navigation__wrapper" role="navigation">
@@ -221,30 +79,184 @@
         <div class="header__social--mobile medium-up--hide">
           <!-- /partials/social.liquid -->
 
-{% if settings.instagram_link != ''
-   or settings.pinterest_link != ''
-   or settings.facebook_link != ''
-   or settings.twitter_link != ''
-   or settings.youtube_link != ''
-   or settings.vimeo_link != ''
-   or settings.tumblr_link != ''
-   or settings.atom_link != '' %}
-	<ul class="clearfix social__links">
-	{% if settings.instagram_link != '' %}<li><a href="{{ settings.instagram_link }}" title="{{ shop.name }} on Instagram" rel="noopener" target="_blank">{% render 'icon-instagram' %}<span class="visually-hidden">Instagram</span></a></li>{% endif %}
-	{% if settings.pinterest_link != '' %}<li><a href="{{ settings.pinterest_link }}" title="{{ shop.name }} on Pinterest" rel="noopener" target="_blank">{% render 'icon-pinterest' %}<span class="visually-hidden">Pinterest</span></a></li>{% endif %}
-	{% if settings.facebook_link != '' %}<li><a href="{{ settings.facebook_link }}" title="{{ shop.name }} on Facebook" rel="noopener" target="_blank">{% render 'icon-facebook' %}<span class="visually-hidden">Facebook</span></a></li>{% endif %}
-	{% if settings.twitter_link != '' %}<li><a href="{{ settings.twitter_link }}" title="{{ shop.name }} on Twitter" rel="noopener" target="_blank">{% render 'icon-twitter' %}<span class="visually-hidden">Twitter</span></a></li>{% endif %}
-	{% if settings.youtube_link != '' %}<li><a href="{{ settings.youtube_link }}" title="{{ shop.name }} on YouTube" rel="noopener" target="_blank">{% render 'icon-youtube' %}<span class="visually-hidden">YouTube</span></a></li>{% endif %}
-	{% if settings.vimeo_link != '' %}<li><a href="{{ settings.vimeo_link }}" title="{{ shop.name }} on Vimeo" rel="noopener" target="_blank">{% render 'icon-vimeo' %}<span class="visually-hidden">Vimeo</span></a></li>{% endif %}
-	{% if settings.tumblr_link != '' %}<li><a href="{{ settings.tumblr_link }}" title="{{ shop.name }} on Tumblr" rel="noopener" target="_blank">{% render 'icon-tumblr' %}<span class="visually-hidden">Tumblr</span></a></li>{% endif %}
-	{% if settings.atom_link != '' %}<li><a href="{{ settings.atom_link }}" title="{{ shop.name }} Feed" rel="noopener" target="_blank">{% render 'icon-rss' %}<span class="visually-hidden">Feed</span></a></li>{% endif %}
-	</ul>
-{% endif %}
+          {% if settings.instagram_link != ''
+            or settings.pinterest_link != ''
+            or settings.facebook_link != ''
+            or settings.twitter_link != ''
+            or settings.youtube_link != ''
+            or settings.vimeo_link != ''
+            or settings.tumblr_link != ''
+            or settings.atom_link != '' %}
+            <ul class="clearfix social__links">
+            {% if settings.instagram_link != '' %}<li><a href="{{ settings.instagram_link }}" title="{{ shop.name }} on Instagram" rel="noopener" target="_blank">{% render 'icon-instagram' %}<span class="visually-hidden">Instagram</span></a></li>{% endif %}
+            {% if settings.pinterest_link != '' %}<li><a href="{{ settings.pinterest_link }}" title="{{ shop.name }} on Pinterest" rel="noopener" target="_blank">{% render 'icon-pinterest' %}<span class="visually-hidden">Pinterest</span></a></li>{% endif %}
+            {% if settings.facebook_link != '' %}<li><a href="{{ settings.facebook_link }}" title="{{ shop.name }} on Facebook" rel="noopener" target="_blank">{% render 'icon-facebook' %}<span class="visually-hidden">Facebook</span></a></li>{% endif %}
+            {% if settings.twitter_link != '' %}<li><a href="{{ settings.twitter_link }}" title="{{ shop.name }} on Twitter" rel="noopener" target="_blank">{% render 'icon-twitter' %}<span class="visually-hidden">Twitter</span></a></li>{% endif %}
+            {% if settings.youtube_link != '' %}<li><a href="{{ settings.youtube_link }}" title="{{ shop.name }} on YouTube" rel="noopener" target="_blank">{% render 'icon-youtube' %}<span class="visually-hidden">YouTube</span></a></li>{% endif %}
+            {% if settings.vimeo_link != '' %}<li><a href="{{ settings.vimeo_link }}" title="{{ shop.name }} on Vimeo" rel="noopener" target="_blank">{% render 'icon-vimeo' %}<span class="visually-hidden">Vimeo</span></a></li>{% endif %}
+            {% if settings.tumblr_link != '' %}<li><a href="{{ settings.tumblr_link }}" title="{{ shop.name }} on Tumblr" rel="noopener" target="_blank">{% render 'icon-tumblr' %}<span class="visually-hidden">Tumblr</span></a></li>{% endif %}
+            {% if settings.atom_link != '' %}<li><a href="{{ settings.atom_link }}" title="{{ shop.name }} Feed" rel="noopener" target="_blank">{% render 'icon-rss' %}<span class="visually-hidden">Feed</span></a></li>{% endif %}
+            </ul>
+          {% endif %}
 
         </div>
       {% endif %}
 
     </section>
+
+    <div class="wrap">
+      {%- if section.settings.show_header_search -%}
+        <!-- /partials/search.liquid -->
+
+        <div class="search">
+          <form class="search__form" method="get" action="{{ routes.search_url }}">
+            <input type="text" name="q"
+              value="{% if search.performed %}{{ search.terms | escape | downcase }}{% endif %}"
+              placeholder="{{ 'general.search.placeholder' | t }}"
+              aria-label="{{ 'general.search.placeholder' | t }}"
+              class="search-query"
+              tabindex="-1">
+            <input type="hidden" name="type" value="product">
+            <a href="#" class="remove-search" tabindex="-1">
+              <span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span>
+            </a>
+          </form>
+
+          <div class="search__results">
+            <div class="search__results-scroller">
+              <div class="search__results-container">
+                <div class="search-outer"></div>
+                <div class="search__results-list product-grid product-grid--results"></div>
+                <div class="loader loader--search">
+                  <div class="loader-indeterminate"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {%- endif -%}
+      <!-- SEARCH, CURRENCY, ACCOUNT, CART -->
+
+      <div class="header-content">
+        {% if section.settings.show_header_social %}
+          <nav class="header__social">
+            <!-- /partials/social.liquid -->
+
+            {% if settings.instagram_link != ''
+              or settings.pinterest_link != ''
+              or settings.facebook_link != ''
+              or settings.twitter_link != ''
+              or settings.youtube_link != ''
+              or settings.vimeo_link != ''
+              or settings.tumblr_link != ''
+              or settings.atom_link != '' %}
+              <ul class="clearfix social__links">
+              {% if settings.instagram_link != '' %}<li><a href="{{ settings.instagram_link }}" title="{{ shop.name }} on Instagram" rel="noopener" target="_blank">{% render 'icon-instagram' %}<span class="visually-hidden">Instagram</span></a></li>{% endif %}
+              {% if settings.pinterest_link != '' %}<li><a href="{{ settings.pinterest_link }}" title="{{ shop.name }} on Pinterest" rel="noopener" target="_blank">{% render 'icon-pinterest' %}<span class="visually-hidden">Pinterest</span></a></li>{% endif %}
+              {% if settings.facebook_link != '' %}<li><a href="{{ settings.facebook_link }}" title="{{ shop.name }} on Facebook" rel="noopener" target="_blank">{% render 'icon-facebook' %}<span class="visually-hidden">Facebook</span></a></li>{% endif %}
+              {% if settings.twitter_link != '' %}<li><a href="{{ settings.twitter_link }}" title="{{ shop.name }} on Twitter" rel="noopener" target="_blank">{% render 'icon-twitter' %}<span class="visually-hidden">Twitter</span></a></li>{% endif %}
+              {% if settings.youtube_link != '' %}<li><a href="{{ settings.youtube_link }}" title="{{ shop.name }} on YouTube" rel="noopener" target="_blank">{% render 'icon-youtube' %}<span class="visually-hidden">YouTube</span></a></li>{% endif %}
+              {% if settings.vimeo_link != '' %}<li><a href="{{ settings.vimeo_link }}" title="{{ shop.name }} on Vimeo" rel="noopener" target="_blank">{% render 'icon-vimeo' %}<span class="visually-hidden">Vimeo</span></a></li>{% endif %}
+              {% if settings.tumblr_link != '' %}<li><a href="{{ settings.tumblr_link }}" title="{{ shop.name }} on Tumblr" rel="noopener" target="_blank">{% render 'icon-tumblr' %}<span class="visually-hidden">Tumblr</span></a></li>{% endif %}
+              {% if settings.atom_link != '' %}<li><a href="{{ settings.atom_link }}" title="{{ shop.name }} Feed" rel="noopener" target="_blank">{% render 'icon-rss' %}<span class="visually-hidden">Feed</span></a></li>{% endif %}
+              </ul>
+            {% endif %}
+
+          </nav>
+        {% endif %}
+
+        <!-- LOGO -->
+        <h1 class="logo__wrapper" id="logo" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="300">
+          <a href="{{ routes.root_url }}">
+            {%- case section.settings.logo_type -%}
+              {%- when 'image' -%}
+                {% if section.settings.logo_image %}
+                  {%- assign image = section.settings.logo_image -%}
+                  {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                  {%- assign image_height = section.settings.logo_image_width | divided_by: image.aspect_ratio | round | append: 'px' -%}
+                  <img class="lazyload logo logo--default"
+                    src="{{ image | img_url: '400x' }}"
+                    data-src="{{ img_url }}"
+                    data-widths="[180, 360, 540, 720, 900, 1080, 1296]"
+                    data-aspectratio="{{ image.aspect_ratio }}"
+                    data-sizes="auto"
+                    data-parent-fit="contain"
+                    style="height: {{ image_height }}"
+                    alt="{{ shop.name | escape }}"/>
+
+                    <noscript>
+                      <img class="no-js-image" src="{{ image | img_url: '400x' }}" alt="{{ shop.name | escape }}"/>
+                    </noscript>
+                    {% if header_overlay and section.settings.transparent_logo != blank %}
+                      {% capture image_size %}{{ section.settings.logo_image_width }}x{% endcapture %}
+                      <img src="{{ section.settings.transparent_logo | img_url: image_size }}"
+                          class="logo logo--transparent"
+                          srcset="{{ section.settings.transparent_logo | img_url: image_size }} 1x, {{ section.settings.transparent_logo | img_url: image_size, scale: 2 }} 2x"
+                          style="height: {{ image_height }}"
+                          alt="{{ section.settings.transparent_logo.alt | default: shop.name }}">
+                    {% endif %}
+
+                    {% if logoImageWidth > 0 %}
+                      {%- capture imageWidth -%}#logo a img { width: {{logoImageWidth}}px; }{%- endcapture-%}
+                      <style>{{imageWidth}}</style>
+                    {% endif %}
+                {% else %}
+                  <span>{{ shop.name | escape }}</span>
+                {% endif %}
+              {%- when 'svg' -%}
+                {%- if section.settings.logo_svg != blank -%}
+                  {{section.settings.logo_svg}}
+                  {% if logoImageWidth > 0 %}
+                    {%- capture imageWidth -%}#logo a svg { width: {{logoImageWidth}}px; }{%- endcapture-%}
+                    <style>{{imageWidth}}</style>
+                  {% endif %}
+                {%- else -%}
+                  <span>{{ shop.name | escape }}</span>
+                {%- endif -%}
+            {%- endcase -%}
+          </a>
+        </h1>
+
+        <div class="user-links">
+          {% if shop.customer_accounts_enabled and section.settings.show_account %}
+            <a href="{{ routes.account_url }}" class="header__account__link" id="account-link">
+              {% comment %} {% render 'icon-account' %} {% endcomment %}
+              <span>{{ 'customer.account.title' | t }}</span>
+            </a>
+          {% endif %}
+          {% if section.settings.show_header_search %}
+            <a href="javascript:void(0)" id="SearchToggle" title="{{ 'general.search.placeholder' | t }}">
+              <span class="search-toggle">
+                <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
+                <span class="oi" data-glyph="magnifying-glass"></span>
+              </span>
+            </a>
+          {% endif %}
+          <a href="{{ routes.cart_url }}" class="header__cart__wrapper" id="CartButton" title="{{ 'cart.general.title' | t }}">
+            <span class="header__cart__icon__wrapper">
+              <span>{{ 'layout.cart.title' | t }}</span>
+              {% comment %} <span class="oi header__cart__icon" data-glyph="cart"></span> {% endcomment %}
+
+              <span class="cart-count-js header__cart__count">{{ cart.item_count }}</span>
+            </span>
+          </a>
+        </div>
+
+        <a href="javascript:void(0)" class="medium-up--hide toggle-menus">
+          <div class="toggle-menus-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="visually-hidden">{{ 'layout.header.menu' | t }}</span>
+        </a>
+      </div>
+
+    </div>
   </div>
 </header>
 
@@ -298,10 +310,38 @@
       "content": "Logo"
     },
     {
+      "type": "select",
+      "id": "logo_type",
+      "label" : {
+        "en" : "Logo type"
+      },
+      "options": [
+       {
+          "value": "image",
+          "label": {
+            "en": "Image"
+          }
+       },
+       {
+         "value": "svg",
+         "label": {
+           "en": "SVG"
+         }
+       }
+      ]
+    },
+    {
       "type": "image_picker",
       "id": "logo_image",
       "label": "Logo image",
       "info": "300px wide recommended"
+    },
+    {
+      "type": "html",
+      "id": "logo_svg",
+      "label": {
+        "en": "Logo SVG"
+      }
     },
     {
       "type": "range",
@@ -426,6 +466,19 @@
       "id": "menu_primary",
       "label": "Primary menu",
       "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Mobbile Navigation"
+      }
+    },
+    {
+      "type": "link_list",
+      "id": "mobile_menu_footer",
+      "label": {
+        "en": "Footer Menu"
+      }
     }
   ],
   "blocks": [

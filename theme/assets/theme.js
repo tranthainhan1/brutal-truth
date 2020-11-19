@@ -218,7 +218,7 @@ Shopify.Products = ( function() {
  * http://www.gnu.org/licenses/gpl.html
  *
  */
- 
+
 jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="";m.expires=-1}var e="";if(m.expires&&(typeof m.expires=="number"||m.expires.toUTCString)){var f;if(typeof m.expires=="number"){f=new Date();f.setTime(f.getTime()+(m.expires*24*60*60*1000))}else{f=m.expires}e="; expires="+f.toUTCString()}var l=m.path?"; path="+(m.path):"";var g=m.domain?"; domain="+(m.domain):"";var a=m.secure?"; secure":"";document.cookie=[b,"=",encodeURIComponent(j),e,l,g,a].join("")}else{var d=null;if(document.cookie&&document.cookie!=""){var k=document.cookie.split(";");for(var h=0;h<k.length;h++){var c=jQuery.trim(k[h]);if(c.substring(0,b.length+1)==(b+"=")){d=decodeURIComponent(c.substring(b.length+1));break}}}return d}};
 
 /*
@@ -233,7 +233,7 @@ y),b(document.body).on("sticky_kit:recalc",y),a.on("sticky_kit:detach",H),setTim
 /*!
  * jQuery throttle / debounce - v1.1 - 3/7/2010
  * http://benalman.com/projects/jquery-throttle-debounce-plugin/
- * 
+ *
  * Copyright (c) 2010 "Cowboy" Ben Alman
  * Dual licensed under the MIT and GPL licenses.
  * http://benalman.com/about/license/
@@ -242,51 +242,51 @@ y),b(document.body).on("sticky_kit:recalc",y),a.on("sticky_kit:detach",H),setTim
 // Script: jQuery throttle / debounce: Sometimes, less is more!
 //
 // *Version: 1.1, Last updated: 3/7/2010*
-// 
+//
 // Project Home - http://benalman.com/projects/jquery-throttle-debounce-plugin/
 // GitHub       - http://github.com/cowboy/jquery-throttle-debounce/
 // Source       - http://github.com/cowboy/jquery-throttle-debounce/raw/master/jquery.ba-throttle-debounce.js
 // (Minified)   - http://github.com/cowboy/jquery-throttle-debounce/raw/master/jquery.ba-throttle-debounce.min.js (0.7kb)
-// 
+//
 // About: License
-// 
+//
 // Copyright (c) 2010 "Cowboy" Ben Alman,
 // Dual licensed under the MIT and GPL licenses.
 // http://benalman.com/about/license/
-// 
+//
 // About: Examples
-// 
+//
 // These working examples, complete with fully commented code, illustrate a few
 // ways in which this plugin can be used.
-// 
+//
 // Throttle - http://benalman.com/code/projects/jquery-throttle-debounce/examples/throttle/
 // Debounce - http://benalman.com/code/projects/jquery-throttle-debounce/examples/debounce/
-// 
+//
 // About: Support and Testing
-// 
+//
 // Information about what version or versions of jQuery this plugin has been
 // tested with, what browsers it has been tested in, and where the unit tests
 // reside (so you can test it yourself).
-// 
+//
 // jQuery Versions - none, 1.3.2, 1.4.2
 // Browsers Tested - Internet Explorer 6-8, Firefox 2-3.6, Safari 3-4, Chrome 4-5, Opera 9.6-10.1.
 // Unit Tests      - http://benalman.com/code/projects/jquery-throttle-debounce/unit/
-// 
+//
 // About: Release History
-// 
+//
 // 1.1 - (3/7/2010) Fixed a bug in <jQuery.throttle> where trailing callbacks
 //       executed later than they should. Reworked a fair amount of internal
 //       logic as well.
 // 1.0 - (3/6/2010) Initial release as a stand-alone project. Migrated over
 //       from jquery-misc repo v0.4 to jquery-throttle repo v1.0, added the
 //       no_trailing throttle parameter and debounce functionality.
-// 
+//
 // Topic: Note for non-jQuery users
-// 
+//
 // jQuery isn't actually required for this plugin, because nothing internal
 // uses any jQuery methods or properties. jQuery is just used as a namespace
 // under which these methods can exist.
-// 
+//
 // Since jQuery isn't actually required for this plugin, if jQuery doesn't exist
 // when this plugin is loaded, the method described below will be created in
 // the `Cowboy` namespace. Usage will be exactly the same, but instead of
@@ -294,47 +294,47 @@ y),b(document.body).on("sticky_kit:recalc",y),a.on("sticky_kit:detach",H),setTim
 
 (function(window,undefined){
   '$:nomunge'; // Used by YUI compressor.
-  
+
   // Since jQuery really isn't required for this plugin, use `jQuery` as the
   // namespace only if it already exists, otherwise use the `Cowboy` namespace,
   // creating it if necessary.
   var $ = window.jQuery || window.Cowboy || ( window.Cowboy = {} ),
-    
+
     // Internal method reference.
     jq_throttle;
-  
+
   // Method: jQuery.throttle
-  // 
+  //
   // Throttle execution of a function. Especially useful for rate limiting
   // execution of handlers on events like resize and scroll. If you want to
   // rate-limit execution of a function to a single time, see the
   // <jQuery.debounce> method.
-  // 
+  //
   // In this visualization, | is a throttled-function call and X is the actual
   // callback execution:
-  // 
+  //
   // > Throttled with `no_trailing` specified as false or unspecified:
   // > ||||||||||||||||||||||||| (pause) |||||||||||||||||||||||||
   // > X    X    X    X    X    X        X    X    X    X    X    X
-  // > 
+  // >
   // > Throttled with `no_trailing` specified as true:
   // > ||||||||||||||||||||||||| (pause) |||||||||||||||||||||||||
   // > X    X    X    X    X             X    X    X    X    X
-  // 
+  //
   // Usage:
-  // 
+  //
   // > var throttled = jQuery.throttle( delay, [ no_trailing, ] callback );
-  // > 
+  // >
   // > jQuery('selector').bind( 'someevent', throttled );
   // > jQuery('selector').unbind( 'someevent', throttled );
-  // 
+  //
   // This also works in jQuery 1.4+:
-  // 
+  //
   // > jQuery('selector').bind( 'someevent', jQuery.throttle( delay, [ no_trailing, ] callback ) );
   // > jQuery('selector').unbind( 'someevent', callback );
-  // 
+  //
   // Arguments:
-  // 
+  //
   //  delay - (Number) A zero-or-greater delay in milliseconds. For event
   //    callbacks, values around 100 or 250 (or even higher) are most useful.
   //  no_trailing - (Boolean) Optional, defaults to false. If no_trailing is
@@ -346,27 +346,27 @@ y),b(document.body).on("sticky_kit:recalc",y),a.on("sticky_kit:detach",H),setTim
   //  callback - (Function) A function to be executed after delay milliseconds.
   //    The `this` context and all arguments are passed through, as-is, to
   //    `callback` when the throttled-function is executed.
-  // 
+  //
   // Returns:
-  // 
+  //
   //  (Function) A new, throttled, function.
-  
+
   $.throttle = jq_throttle = function( delay, no_trailing, callback, debounce_mode ) {
     // After wrapper has stopped being called, this timeout ensures that
     // `callback` is executed at the proper times in `throttle` and `end`
     // debounce modes.
     var timeout_id,
-      
+
       // Keep track of the last time `callback` was executed.
       last_exec = 0;
-    
+
     // `no_trailing` defaults to falsy.
     if ( typeof no_trailing !== 'boolean' ) {
       debounce_mode = callback;
       callback = no_trailing;
       no_trailing = undefined;
     }
-    
+
     // The `wrapper` function encapsulates all of the throttling / debouncing
     // functionality and when executed will limit the rate at which `callback`
     // is executed.
@@ -374,91 +374,91 @@ y),b(document.body).on("sticky_kit:recalc",y),a.on("sticky_kit:detach",H),setTim
       var that = this,
         elapsed = +new Date() - last_exec,
         args = arguments;
-      
+
       // Execute `callback` and update the `last_exec` timestamp.
       function exec() {
         last_exec = +new Date();
         callback.apply( that, args );
       };
-      
+
       // If `debounce_mode` is true (at_begin) this is used to clear the flag
       // to allow future `callback` executions.
       function clear() {
         timeout_id = undefined;
       };
-      
+
       if ( debounce_mode && !timeout_id ) {
         // Since `wrapper` is being called for the first time and
         // `debounce_mode` is true (at_begin), execute `callback`.
         exec();
       }
-      
+
       // Clear any existing timeout.
       timeout_id && clearTimeout( timeout_id );
-      
+
       if ( debounce_mode === undefined && elapsed > delay ) {
         // In throttle mode, if `delay` time has been exceeded, execute
         // `callback`.
         exec();
-        
+
       } else if ( no_trailing !== true ) {
         // In trailing throttle mode, since `delay` time has not been
         // exceeded, schedule `callback` to execute `delay` ms after most
         // recent execution.
-        // 
+        //
         // If `debounce_mode` is true (at_begin), schedule `clear` to execute
         // after `delay` ms.
-        // 
+        //
         // If `debounce_mode` is false (at end), schedule `callback` to
         // execute after `delay` ms.
         timeout_id = setTimeout( debounce_mode ? clear : exec, debounce_mode === undefined ? delay - elapsed : delay );
       }
     };
-    
+
     // Set the guid of `wrapper` function to the same of original callback, so
     // it can be removed in jQuery 1.4+ .unbind or .die by using the original
     // callback as a reference.
     if ( $.guid ) {
       wrapper.guid = callback.guid = callback.guid || $.guid++;
     }
-    
+
     // Return the wrapper function.
     return wrapper;
   };
-  
+
   // Method: jQuery.debounce
-  // 
+  //
   // Debounce execution of a function. Debouncing, unlike throttling,
   // guarantees that a function is only executed a single time, either at the
   // very beginning of a series of calls, or at the very end. If you want to
   // simply rate-limit execution of a function, see the <jQuery.throttle>
   // method.
-  // 
+  //
   // In this visualization, | is a debounced-function call and X is the actual
   // callback execution:
-  // 
+  //
   // > Debounced with `at_begin` specified as false or unspecified:
   // > ||||||||||||||||||||||||| (pause) |||||||||||||||||||||||||
   // >                          X                                 X
-  // > 
+  // >
   // > Debounced with `at_begin` specified as true:
   // > ||||||||||||||||||||||||| (pause) |||||||||||||||||||||||||
   // > X                                 X
-  // 
+  //
   // Usage:
-  // 
+  //
   // > var debounced = jQuery.debounce( delay, [ at_begin, ] callback );
-  // > 
+  // >
   // > jQuery('selector').bind( 'someevent', debounced );
   // > jQuery('selector').unbind( 'someevent', debounced );
-  // 
+  //
   // This also works in jQuery 1.4+:
-  // 
+  //
   // > jQuery('selector').bind( 'someevent', jQuery.debounce( delay, [ at_begin, ] callback ) );
   // > jQuery('selector').unbind( 'someevent', callback );
-  // 
+  //
   // Arguments:
-  // 
+  //
   //  delay - (Number) A zero-or-greater delay in milliseconds. For event
   //    callbacks, values around 100 or 250 (or even higher) are most useful.
   //  at_begin - (Boolean) Optional, defaults to false. If at_begin is false or
@@ -470,17 +470,17 @@ y),b(document.body).on("sticky_kit:recalc",y),a.on("sticky_kit:detach",H),setTim
   //  callback - (Function) A function to be executed after delay milliseconds.
   //    The `this` context and all arguments are passed through, as-is, to
   //    `callback` when the debounced-function is executed.
-  // 
+  //
   // Returns:
-  // 
+  //
   //  (Function) A new, debounced, function.
-  
+
   $.debounce = function( delay, at_begin, callback ) {
     return callback === undefined
       ? jq_throttle( delay, at_begin, false )
       : jq_throttle( delay, callback, at_begin !== false );
   };
-  
+
 })(this);
 
 /*!
@@ -605,7 +605,7 @@ Shopify.Cart.ShippingCalculator = (function() {
         jQuery("#estimated-shipping em").html("FREE")
       } else {
         jQuery("#estimated-shipping em").html(slate.Currency.formatMoney(rates[0].price, theme.moneyFormat))
-        
+
       }
     }
     _render({
@@ -721,10 +721,10 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 /**!
  * trunk8 v1.3.2
  * https://github.com/rviscomi/trunk8
- * 
+ *
  * Copyright 2012 Rick Viscomi
  * Released under the MIT License.
- * 
+ *
  * Date: October 21, 2012
  */
 
@@ -742,13 +742,13 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 		WIDTH = {
 			auto: 'auto'
 		};
-	
+
 	function trunk8(element) {
 		this.$element = $(element);
 		this.original_text = this.$element.html();
 		this.settings = $.extend({}, $.fn.trunk8.defaults);
 	}
-	
+
 	trunk8.prototype.updateSettings = function (options) {
 		this.settings = $.extend(this.settings, options);
 	};
@@ -766,7 +766,7 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 			lower, upper,
 			bite_size,
 			bite;
-		
+
 		/* Reset the field to the original string. */
 		this.html(str);
 
@@ -784,9 +784,9 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 
 			while (lower <= upper) {
 				bite_size = lower + ((upper - lower) >> 1);
-				
+
 				bite = utils.eatStr(str, side, length - bite_size, fill);
-				
+
 				this.html(bite);
 
 				/* Check for overflow. */
@@ -803,10 +803,10 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 
 			/* Reset the content to eliminate possible existing scroll bars. */
 			this.html('');
-			
+
 			/* Display the biggest bite. */
 			this.html(max_bite);
-			
+
 			if (settings.tooltip) {
 				this.attr('title', str);
 			}
@@ -817,7 +817,7 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 			bite = utils.eatStr(str, side, bite_size, fill);
 
 			this.html(bite);
-			
+
 			if (settings.tooltip) {
 				this.attr('title', str);
 			}
@@ -832,13 +832,13 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 			return this.each(function () {
 				var $this = $(this),
 					data = $this.data('trunk8');
-				
+
 				if (!data) {
 					$this.data('trunk8', (data = new trunk8(this)));
 				}
-				
+
 				data.updateSettings(options);
-				
+
 				truncate.call($this);
 			});
 		},
@@ -847,7 +847,7 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 		update: function (new_string) {
 			return this.each(function () {
 				var $this = $(this);
-				
+
 				/* Update text. */
 				if (new_string) {
 					$this.data('trunk8').original_text = new_string;
@@ -857,12 +857,12 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 				truncate.call($this);
 			});
 		},
-		
+
 		revert: function () {
 			return this.each(function () {
 				/* Get original text. */
 				var text = $(this).data('trunk8').original_text;
-				
+
 				/* Revert element to original text. */
 				$(this).html(text);
 			});
@@ -886,7 +886,7 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 	        if (utils.eatStr.cache[key]) {
 				return utils.eatStr.cache[key];
 	        }
-	        
+
 			/* Common error handling. */
 		    if ((typeof str !== 'string') || (length === 0)) {
 		    	$.error('Invalid source string "' + str + '".');
@@ -908,12 +908,12 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 			        /* str... */
 		            return utils.eatStr.cache[key] =
 			            	$.trim(str.substr(0, length - bite_size)) + fill;
-		            
+
 		        case SIDES.left:
 			        /* ...str */
 		            return utils.eatStr.cache[key] =
 			            	fill + $.trim(str.substr(bite_size));
-		            
+
 		        case SIDES.center:
 			        /* Bit-shift to the right by one === Math.floor(x / 2) */
 		            half_length = length >> 1; // halve the length
@@ -924,12 +924,12 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 			            	$.trim(utils.eatStr(str.substr(0, length - half_length), SIDES.right, bite_size - half_bite_size, '')) +
 		            		fill +
 		            		$.trim(utils.eatStr(str.substr(length - half_length), SIDES.left, half_bite_size, ''));
-		            
+
 		        default:
 		        	$.error('Invalid side "' + side + '".');
 		    }
 		},
-		
+
 		getLineHeight: function (elem) {
 	            var $elem = $(elem),
 	            	floats = $elem.css('float'),
@@ -937,27 +937,27 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 	            	html = $elem.html(),
 			        wrapper_id = 'line-height-test',
 			        line_height;
-	            
+
 	            if (floats !== 'none') {
 	            	$elem.css('float', 'none');
 	            }
-	            
+
 	            if (position === 'absolute') {
 	            	$elem.css('position', 'static');
 	            }
-	
+
 	            /* Set the content to a small single character and wrap. */
 	            $elem.html('i').wrap('<div id="' + wrapper_id + '" />');
-	
+
 	            /* Calculate the line height by measuring the wrapper.*/
 	            line_height = $('#' + wrapper_id).innerHeight();
-	
+
 	            /* Remove the wrapper and reset the style/content. */
 	            $elem.html(html).css({
 	            	'float': floats,
 	            	'position': position
 	            }).unwrap();
-	
+
 	            return line_height;
 	        }
 	};
@@ -966,7 +966,7 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 	utils.eatStr.generateKey = function () {
 		return Array.prototype.join.call(arguments, '');
 	};
-	
+
 	$.fn.trunk8 = function (method) {
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -978,7 +978,7 @@ this.dispatchEvent("dragMove",t,[e,i])}},o.dragEnd=function(t,e){if(this.isDragg
 			$.error('Method ' + method + ' does not exist on jQuery.trunk8');
 		}
 	};
-	
+
 	/* Default trunk8 settings. */
 	$.fn.trunk8.defaults = {
 		fill: '&hellip;',
@@ -1112,7 +1112,7 @@ slate.a11y = {
  */
 
 slate.cart = {
-  
+
   /**
    * Browser cookies are required to use the cart. This function checks if
    * cookies are enabled in the browser.
@@ -1255,7 +1255,7 @@ slate.rte = {
     options.$iframes.each(function() {
       // Add wrapper to make video responsive
       $(this).wrap('<div class="' + iframeWrapperClass + '"></div>');
-      
+
       // Re-set the src attribute on each iframe after page load
       // for Chrome's "incorrect iFrame content on 'back'" bug.
       // https://code.google.com/p/chromium/issues/detail?id=395791
@@ -1369,7 +1369,7 @@ slate.Sections.prototype = $.extend({}, slate.Sections.prototype, {
     }
 
     this.constructors[type] = constructors;
-    
+
     $('[data-section-type=' + type + ']').each(function(index, container) {
       this._createInstance(container, constructors);
     }.bind(this));
@@ -1869,7 +1869,7 @@ theme.ProductModel = (function() {
       if (models.hasOwnProperty(key)) {
         var model = models[key];
         if (!model.modelViewerUi) {
-          model.modelViewerUi = new Shopify.ModelViewerUI(model.$element);  
+          model.modelViewerUi = new Shopify.ModelViewerUI(model.$element);
         }
         setupModelViewerListeners(model);
       }
@@ -1884,7 +1884,7 @@ theme.ProductModel = (function() {
         xrButton.$element.attr('data-shopify-model3d-id', model.modelId);
 
         pauseOtherMedia( model.mediaId );
-        
+
         if (window.theme.touched) return;
         model.modelViewerUi.play();
       })
@@ -2392,6 +2392,16 @@ theme.Header = (function() {
     this.$container = $(container);
     mainNavigation();
     headerPush();
+    !function(){
+      // mobile accordion for tabs content
+      $('.accordion-toggle', this.$container).click(function() {
+        if($(this).next('div').is(':visible')){
+          $(this).next('div').slideUp('fast');
+        } else {
+          $(this).next('div').slideDown('fast');
+        }
+      });
+    }();
 
     if ( $('#header').hasClass( 'header--sticky') ) {
       stickyHeader();
@@ -2482,7 +2492,7 @@ theme.Header = (function() {
       // 13 = Enter, 9 = TAB, 32 = Spacebar
       if ( e.keyCode === slate.utils.keyboardKeys.ENTER || e.keyCode === slate.utils.keyboardKeys.SPACE ) {
         e.preventDefault();
-        
+
         var item = $(this).closest('li'),
             isDropdownVisible = item.hasClass( 'active' ),
             submenu = $(this).closest('li').find( '.main-menu-dropdown' );
@@ -3508,10 +3518,10 @@ theme.ProductGrid = (function() {
       $( window )
           .on( 'resize', $.debounce( 100, self.mobileCheck.bind( self ) ) )
           .on( 'load', self.mobileCheck.bind( self ) );
-  
+
       var showReviews = this.$container.data('reviews');
       var reviewsAppInstalled = typeof(window.SPR) == 'function';
-  
+
       if (showReviews && reviewsAppInstalled) {
         window.SPR.initDomEls();
         window.SPR.loadBadges();
@@ -3594,8 +3604,8 @@ theme.Quickview = (function() {
         this.$cloneContent = this.$clone.find(selectors.content);
 
         theme.modal(
-          self.$clone, 
-          self.onOpen.bind(self), 
+          self.$clone,
+          self.onOpen.bind(self),
           self.onClose.bind(self)
         );
         $.get(theme.routes.root+'products/'+self.handle+'?view=ajax_quickview')
@@ -3615,13 +3625,13 @@ theme.Quickview = (function() {
           e.preventDefault();
           self.$modal.trigger({
             type:'quickview',
-            handle:self.handle, 
+            handle:self.handle,
           });
         });
       },
       onLoaded: function() {
         var $slider = this.$cloneContent.find('.product__slides');
-        var hasSlider = $slider.hasClass('slick-initialized'); 
+        var hasSlider = $slider.hasClass('slick-initialized');
         if (hasSlider) {
           $(window).trigger( 'resize' );
         } else if ( typeof theme.mediaInstances[this.id] === 'undefined' ) {
@@ -3714,7 +3724,7 @@ theme.AjaxAdd = (function() {
     this.init();
   }
   AjaxAdd.prototype = $.extend({}, AjaxAdd.prototype, {
-    init: function() {  
+    init: function() {
       var self = this;
       this.$button.on('click', function(e) {
         e.preventDefault();
@@ -4516,7 +4526,7 @@ theme.Hero = (function() {
           var kebabKey = "data-" + key;
           kebabKey = kebabKey.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
           $parallaxSlider.attr( kebabKey, val );
-          
+
         });
         $parallaxSlider.addClass('lazyload');
         $parallaxSlider.attr('alt', this.altText);
@@ -4821,13 +4831,13 @@ theme.Slideshow = (function() {
       var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
       if ( isFirstSection ) {
-        
+
         var headerHeight = windowWidth >= 750 ? $('.header__content').height() : 0;
         var sliderHeight = this.$slideshow.find( '.slick-current .hero__content' ).outerHeight();
         var extraPadding = windowWidth >= 750 ? 120 : 40;
         var minHeight = headerHeight + sliderHeight + extraPadding;
 
-        $slideshow.find( '.hero__content__wrapper' ).css({ 
+        $slideshow.find( '.hero__content__wrapper' ).css({
           'padding-top': headerHeight,
           'margin-top': 0
         });
@@ -4848,7 +4858,7 @@ theme.Slideshow = (function() {
         $slide.find( '.hero__content__wrapper' ).css( 'min-height', slideHeight );
 
         if ( isCurrentSlide ) {
-          $slideshow.parent().css( 'min-height', slideHeight );  
+          $slideshow.parent().css( 'min-height', slideHeight );
 
           if ( $slideshow.hasClass( 'slick-initialized' ) ) {
             $slideshow.slick('setPosition');
@@ -4898,14 +4908,14 @@ theme.LogoList = (function() {
         speed: 300,
         slidesToShow: 1,
         dots: false,
-        arrows: false        
+        arrows: false
       }
-      
+
       $slideshowText.slick( options );
 
       $slideshowNav.on( 'click', '.logo-list__slide', function() {
         var index = $(this).data( 'slick-index' );
-        
+
         $(this).addClass( 'is-active' ).siblings().removeClass( 'is-active' );
         $slideshowText.slick( 'slickGoTo', index );
       } );
@@ -5698,11 +5708,11 @@ theme.Login = (function() {
     } else {
       hideRecoverPasswordForm();
     }
-    showButton.addEventListener('click', function(e) { 
+    showButton.addEventListener('click', function(e) {
       e.preventDefault();
       showRecoverPasswordForm();
     }, false);
-    hideButton.addEventListener('click', function(e) { 
+    hideButton.addEventListener('click', function(e) {
       e.preventDefault();
       hideRecoverPasswordForm();
     }, false);
@@ -5779,7 +5789,7 @@ $(document).ready(function() {
   if (slate.cart.cookiesEnabled()) {
     document.documentElement.className = document.documentElement.className.replace('supports-no-cookies', 'supports-cookies');
   }
-  
+
   // Fire theme:touch once and set window.theme.touched to the value of whether it's a touch device.
   function wasTouched() {
     window.theme.touched = true;
