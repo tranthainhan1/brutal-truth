@@ -18,6 +18,14 @@
     </div>
   {%- endif -%}
   <div class="site-footer">
+    <div class="footer__secondary__nav__mobile small-">
+      <ul>
+        {% for link in linklists[section.settings.footer_secondary_linklist].links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
     {% if section.settings.footer_logo %}
     <style>
       .footer__logo img { width: {{ logoImageWidth }}; }
@@ -47,7 +55,7 @@
             {% assign linklist = linklists[block.settings.linklist] %}
             <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
               <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ linklist.title }} </h2>
-              <hr>
+
               <ul class="footer__quicklinks unstyled">
                 {% for link in linklist.links %}
                   <li><a href="{{ link.url }}">{{ link.title }}</a></li>
@@ -60,13 +68,13 @@
             {% if page == blank or page.empty? %}
               <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
                 <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ shop.name }}</h2>
-                <hr>
+
                 <div class="rte">{{ 'home_page.onboarding.no_content' | t }}</div>
               </div>
             {% else %}
               <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
                 <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ page.title | escape }}</h2>
-                <hr>
+
                 <div class="rte">{{ page.content }}</div>
               </div>
             {% endif %}
@@ -75,7 +83,7 @@
             <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
               {%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Tumblr, YouTube, Vimeo,' | split: ', ' -%}
               <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ block.settings.title | escape }}</h2>
-              <hr>
+
               {% if block.settings.richtext != '<p></p>' %}
                 <div class="rte footer__social__text">
                   {{ block.settings.richtext }}
@@ -89,34 +97,62 @@
           {% when 'text' %}
             <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
               <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ block.settings.title | escape }}</h2>
-              <hr>
+
               <div class="rte">{{ block.settings.text }}</div>
             </div>
 
           {% when 'newsletter' %}
             <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
               <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ 'layout.footer.newsletter_title' | t }}</h2>
-              <hr>
+
               <div class="rte footer__newsletter__text">
                 {{ block.settings.richtext }}
               </div>
-              {% form 'customer', id: 'contact-newsletter-footer' %}
-                {% if form.posted_successfully? %}
-                  <p><em>{{ 'general.newsletter_form.thank_you' | t }}</em></p>
-                {% elsif form.errors %}
-                  {% for field in form.errors %}
-                    <p><em>{{ field }} - {{ form.errors.messages[field] }}</em></p>
-                  {% endfor %}
-                {% endif %}
+              {% comment %}
 
-                <input type="hidden" name="contact[accepts_marketing]" value="true">
+                <form action="https://gmail.us20.list-manage.com/subscribe/post-json?u=92a297e6af9f562d7dc528124&amp;id=98e4b77137&amp;c=?" method="post" id="mc-embedded-subscribe-form" class="form-inline form-subscribe klaviyo_styling" target="_blank" novalidate="novalidate">
+                  <input type="hidden" name="g" value="https://gmail.us20.list-manage.com/subscribe/post-json?u=92a297e6af9f562d7dc528124&amp;id=98e4b77137&amp;c=?">
+                  <input required="" type="email" class="form-control" value="" name="email" placeholder="Enter your email address">
+                  <button id="email-submit" type="submit" class="btn-custom" data-live-text-setting="section.footer.mailing_button_text">Subscribe</button>
+                </form>
+                {% form 'customer', id: 'contact-newsletter-footer' %}
+                  {% if form.posted_successfully? %}
+                    <p><em>{{ 'general.newsletter_form.thank_you' | t }}</em></p>
+                  {% elsif form.errors %}
+                    {% for field in form.errors %}
+                      <p><em>{{ field }} - {{ form.errors.messages[field] }}</em></p>
+                    {% endfor %}
+                  {% endif %}
+
+                  <input type="hidden" name="contact[accepts_marketing]" value="true">
+                  <div class="input-group newsletter-form">
+                    <input type="email" id="email_input_footer" class="input-group-field" aria-label="{{ 'general.newsletter_form.newsletter_email' | t }}" autocorrect="off" autocapitalize="off" name="contact[email]" />
+                    <span class="input-group-btn">
+                      <input type="submit" class="btn caps" name="subscribe" id="subscribe" value="{{ 'general.newsletter_form.submit' | t }}">
+                    </span>
+                  </div>
+                {% endform %}
+                {%- if isPopup -%}
+                  <script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+                {%- endif -%}
+              {% endcomment %}
+
+              {%- assign klaviyo_url = block.settings.newsletter_url -%}
+              {%- assign klaviyo_id  = block.settings.newsletter_url | split: 'g=' | last -%}
+              {%- assign isPopup = true -%}
+
+              <form action="{{klaviyo_url}}" class="contact-form" target="_blank" novalidate="novalidate">
+                <input type="hidden" name="g" value="{{klaviyo_id}}">
                 <div class="input-group newsletter-form">
-                  <input type="email" id="email_input_footer" class="input-group-field" aria-label="{{ 'general.newsletter_form.newsletter_email' | t }}" autocorrect="off" autocapitalize="off" name="contact[email]" />
+                  <input type="email" id="email_input_footer" class="input-group-field" value="" name="email" class="contact_email" placeholder="{{ frmHolder }}" required autocorrect="off" autocapitalize="off" aria-label="{{ 'general.newsletter_form.newsletter_email' | t }}">
+
                   <span class="input-group-btn">
                     <input type="submit" class="btn caps" name="subscribe" id="subscribe" value="{{ 'general.newsletter_form.submit' | t }}">
                   </span>
                 </div>
-              {% endform %}
+
+              </form>
+
             </div>
 
           {% else %}
@@ -127,7 +163,7 @@
     <div class="grid footer-bottom">
     {% comment %} grid__item {% if section.settings.footer_payment_enable %}medium-up--two-thirds{% endif %} {% endcomment %}
       <div class="footer__secondary">
-        <div class="left-content">
+        <div class="left-content small--hide">
           {%- form 'localization', class: 'popout--footer' -%}
             {%- if section.settings.show_locale_selector and shop.published_locales.size > 0 -%}
               <div>
@@ -197,7 +233,7 @@
             {% endunless %}
           {% endif %}
           {%- if section.settings.show_copyright -%}
-            <div class="copyright"><span class="text">{{section.settings.copyright_text}}</span><a href="{{ shop.secure_url }}">&copy; {{ shop.name }} {{ 'now' | date: "%Y" }}</a></div>
+            <div class="copyright"><span class="text">{{section.settings.copyright_text}}</span><a href="{{ shop.secure_url }}">&copy;{{ 'now' | date: "%Y" }} {{ shop.name }} </a></div>
           {%- endif -%}
         </div>
 
@@ -413,6 +449,13 @@
           "type": "richtext",
           "label": "Newsletter description",
           "default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+        },
+        {
+          "type" : "textarea",
+          "id" : "newsletter_url",
+          "label" : {
+            "en" : "Newsletter URL"
+          }
         }
       ]
     },

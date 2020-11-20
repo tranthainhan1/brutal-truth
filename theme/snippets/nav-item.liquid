@@ -95,16 +95,13 @@
 
   {%- endfor -%}
 {%- endif -%}
-
-<li class="{% if grandparent or has_megamenu %}grandparent kids-{{ child_count }}{% elsif parent %}parent{% else %}child{%endif%} {% if link.current %}main-menu--active{% endif %}">
-  <a href="{{ link.url }}" class="nav-link">
-    {{ link.title | escape }}
-    {% if parent or grandparent or has_megamenu %}<span class="nav-carat-small" tabindex="0">{% render 'icon-arrow-right' %}</span>{% endif %}
-  </a>
+{% comment %} {% if grandparent or has_megamenu %}grandparent kids-{{ child_count }}{% elsif parent %}parent{% else %}child{%endif%} {% endcomment %}
+<li class="parent {% if link.current %}main-menu--active{% endif %}">
   {% if parent or grandparent or has_megamenu %}
-    <a href="#" class="nav-carat" data-aria-toggle aria-haspopup="true" aria-controls="{{ link_id }}" aria-expanded="false">
-      <span class="visually-hidden">+</span>
-      {% render 'icon-arrow-right' %}
+    <a href="{{link.url}}" onclick="function(){if(window.innerWidth < 750){return false}}" class="nav-link" data-aria-toggle aria-haspopup="true" aria-controls="{{ link_id }}" aria-expanded="false">
+      {% comment %} <span class="visually-hidden">+</span> {% endcomment %}
+      {% comment %} {% render 'icon-arrow-right' %} {% endcomment %}
+      {{ link.title | escape }}
     </a>
 
     <div class="main-menu-dropdown {% if has_megamenu %}main-menu-dropdown--megamenu{% endif %} {% if parent or grandparent %}main-menu-dropdown--has-links{% endif %}" id="{{ link_id }}">
@@ -121,5 +118,10 @@
         {% endif %}
       </ul>
     </div>
+  {%- else -%}
+    <a href="{{ link.url }}" class="nav-link">
+      {{ link.title | escape }}
+      {% comment %} {% if parent or grandparent or has_megamenu %}<span class="nav-carat-small" tabindex="0">{% render 'icon-arrow-right' %}</span>{% endif %} {% endcomment %}
+    </a>
   {% endif %}
 </li>

@@ -89,7 +89,7 @@
                   {%- endif -%}
                 {%- when 'image' -%}
                   {% assign img_url = block.settings.icon_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                  <div class="column__icom">
+                  <div class="column__icon">
                     <div class="lazy-image" style="padding-top:{{ 1 | divided_by: block.settings.icon_image.aspect_ratio | times: 100}}%; background-image:  url('{{ block.settings.icon_image | img_url: '1x1' }}');">
                       <img class="lazyload fade-in"
                         alt="{{ block.settings.icon_image.alt }}"

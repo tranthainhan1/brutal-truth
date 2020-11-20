@@ -5,3 +5,4 @@ development:
   store: brutal-truth.myshopify.com
   ignore_files:
     - settings_data.json
+    - "*.scss.liquid"

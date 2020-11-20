@@ -5,54 +5,73 @@
 <style>
   .logo-list--{{ section.id }} .logo-list__item { opacity: {{ logo_opacity }}; }
 </style>
-
-<div class="logo-list logo-list--{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="logo-list" style="background-color: {{ section.settings.bg_color }};">
+{% comment %} data-section-id="{{ section.id }}" data-section-type="logo-list" {% endcomment %}
+<div class="logo-list logo-list--{{ section.id }}" style="background-color: {{ section.settings.bg_color }};">
   <div class="container">
     <div class="logo-list__wrapper">
 
       {%- if heading -%}
         <h2>{{ heading }}</h2>
       {%- endif -%}
+      {% comment %}
+        <div class="logo-list__slider-text js-logo-list__slider-text" id="logo-list__slider-text--{{ section.id }}">
+          {%- for block in section.blocks -%}
+            {%- assign text = block.settings.text -%}
 
-      <div class="logo-list__slider-text js-logo-list__slider-text" id="logo-list__slider-text--{{ section.id }}">
-        {%- for block in section.blocks -%}
-          {%- assign text = block.settings.text -%}
+            <div class="logo-list__slide logo-list__slide--{{ block.id }}" data-block="item_logo" {{ block.shopify_attributes }}>
+              {%- if text -%}
+                <p>{{ text }}</p>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {% endcomment %}
 
-          <div class="logo-list__slide logo-list__slide--{{ block.id }}" data-block="item_logo" {{ block.shopify_attributes }}>
-            {%- if text -%}
-              <p>{{ text }}</p>
-            {%- endif -%}
-          </div>
-        {%- endfor -%}
-      </div>
-
-      <div class="logo-list__slider js-logo-list__slider" id="logo-list__slider--{{ section.id }}">
+      <div class="logo-list_content grid">
         {%- for block in section.blocks -%}
           {%- assign logo = block.settings.logo -%}
+          <div class="logo-item grid__item large-up--one-quarter medium--one-third small--one-half">
+            <a href="{{block.settings.logo_link}}">
+              {%- case block.settings.logo_type -%}
+                {%- when 'image' -%}
+                  {%- if block.settings.logo_image != blank -%}
+                    <div class="lazy-image" style="padding-top:{{ 1 | divided_by: block.settings.logo_image.aspect_ratio | times: 100}}%; background-image:  url('{{ block.settings.logo_image | img_url: '1x1' }}');">
+                      {% assign img_url = block.settings.logo_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                      <img class="lazyload fade-in"
+                        alt="{{ block.settings.logo_image.alt }}"
+                        data-aos="img-in"
+                        data-aos-delay="{{ forloop.index0 | times: 150 }}"
+                        data-aos-duration="{{ forloop.index0 | times: 100 | plus: 800 }}"
+                        data-aos-easing="ease-out-quart"
+                        data-src="{{ img_url }}"
+                        data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2450, 2700, 3000, 3350, 3750, 4100]"
+                        data-aspectratio="{{  block.settings.logo_image.aspect_ratio }}"
+                        data-parent-fit="cover"
+                        data-sizes="auto"/>
+                    </div>
+                  {%- else -%}
+                    <p>{{ 'image' | placeholder_svg_tag }}</p>
+                  {%- endif -%}
+                {% comment %} end {% endcomment %}
 
-          <div class="logo-list__slide logo-list__slide--{{ block.id }} {% if forloop.index == 1 %}is-active{% endif %}" data-slick-index="{{ forloop.index | minus: 1 }}" data-block="item_logo" {{ block.shopify_attributes }}>
-            {%- if logo != blank -%}
-              <div
-                class="logo-list__item lazyload fade-in"
-                data-bgset="{%- render 'bgset', image: logo -%}"
-                data-sizes="auto"
-                data-parent-fit="cover"
-                data-aspectratio="{{ logo.aspect_ratio }}"></div>
-
-              <noscript>
-                <div class="logo-list__item no-js-image" style="background-image: url( {{ logo | img_url: '180x' }} );"></div>
-              </noscript>
-            {%- else -%}
-              <div class="logo-list__item svg-placeholder">
-                {{ 'logo' | placeholder_svg_tag: 'placeholder-svg' }}
-              </div>
-            {%- endif -%}
+                {%- when 'svg' -%}
+                  {%- if block.settings.logo_svg != blank -%}
+                    <div class="logo_svg"
+                      data-aos="img-in"
+                      data-aos-delay="{{ forloop.index0 | times: 150 }}"
+                      data-aos-duration="{{ forloop.index0 | times: 100 | plus: 800 }}"
+                      data-aos-easing="ease-out-quart"
+                    >{{block.settings.logo_svg}}</div>
+                  {%- else -%}
+                    <p>{{ 'image' | placeholder_svg_tag }}</p>
+                  {%- endif -%}
+                {% comment %} end {% endcomment %}
+              {%- endcase -%}
+            </a>
           </div>
         {%- endfor -%}
       </div>
 
-      <div class="slideshow__arrow slideshow__arrow--prev" data-prev-arrow>{% render 'icon-arrow-left' %}</div>
-      <div class="slideshow__arrow slideshow__arrow--next" data-next-arrow>{% render 'icon-arrow-right' %}</div>
     </div>
   </div>
 </div>
@@ -92,15 +111,51 @@
       "name": "Logo item",
       "settings": [
         {
-          "type": "image_picker",
-          "id": "logo",
-          "label": "Logo"
+          "type": "text",
+          "id": "title",
+          "label": {
+            "en": "Title"
+          }
         },
         {
-          "type": "textarea",
-          "id": "text",
-          "label": "Text",
-          "default": "Include a brief quote or a description of your relationship with the brand."
+          "type": "select",
+          "id": "logo_type",
+          "label" : {
+            "en" : "Logo type"
+          },
+          "options": [
+           {
+              "value": "image",
+              "label": {
+                "en": "Image"
+              }
+           },
+           {
+             "value": "svg",
+             "label": {
+               "en": "SVG"
+             }
+           }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Logo Image"
+        },
+        {
+          "type" : "url",
+          "id" : "logo_link",
+          "label" : {
+            "en": "Logo link"
+          }
+        },
+        {
+          "type": "html",
+          "id": "logo_svg",
+          "label": {
+            "en": "SVG"
+          }
         }
       ]
     }
