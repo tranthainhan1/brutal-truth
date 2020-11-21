@@ -3,81 +3,60 @@
     {%- for block in section.blocks -%}
       {%- case block.type -%}
         {%- when 'text-with-image' -%}
-          <div class="block text-with-image grid block-{{block.id}} {%- if block.settings.reverse_order -%} reverse-order {%- endif -%}" {{block.shopify_attributes}}>
-            {% comment %}
-              {%- if block.settings.reverse_order -%}
-
-                <div class="block_image grid__item large-up--one-half medium--one-whole">
-                  {%- if block.settings.image != blank -%}
-
-                    {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                    <div class="lazy-image" style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');">
-                      <img class="lazyload "
-                        style="height: 100%;"
-                        alt="{{ block.settings.image.alt }}"
-                        data-src="{{ img_url }}"
-                        data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2450, 2700, 3000, 3350, 3750, 4100]"
-                        data-aspectratio="{{  block.settings.image.aspect_ratio }}"
-                        data-parent-fit="cover"
-                        data-sizes="auto"/>
-                    </div>
-                    <noscript>
-                      <div class="no-script" style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');" >
-                        <img style="width: 100%;height: 100%;" src="{{block.settings.image | img_url: 'master'}}" alt="{{block.settings.image.alt}}">
-                      </div>
-                    </noscript>
-                  {%- else -%}
-                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-                  {%- endif -%}
-                </div>
-
-                <div class="block_text grid__item large-up--one-half medium--one-whole">
-                  <h2>{{block.settings.title}}</h2>
-                  <div class="description">{{block.settings.desc}}</div>
-                </div>
-              {%- else -%}
+           {%- capture isRichtext -%}
+              {%- assign word_count = block.settings.desc | split: ' ' | size -%}
+              {%- if word_count > 100 -%}
+                richtext
               {%- endif -%}
-            {% endcomment %}
-              <div class="block_text grid__item large-up--one-half medium--one-whole">
-                <div class="block_text_wrapper">
-                  <h2>{{block.settings.title}}</h2>
-                  <div class="description">{{block.settings.desc}}</div>
-                </div>
+            {%- endcapture -%}
+            {%- capture gridClass -%}
+              {%- if isRichtext != blank -%}
+                medium--one-whole large-up--one-half
+              {%- else -%}
+                medium--one-half large-up--one-half
+              {%- endif -%}
+            {%- endcapture -%}
+          <div class="block {{isRichtext}} text-with-image grid block-{{block.id}} {%- if block.settings.reverse_order -%} reverse-order {%- endif -%}" {{block.shopify_attributes}}>
+            <div class="block_text grid__item {{gridClass}} ">
+              <div class="block_text_wrapper">
+                <h2>{{block.settings.title}}</h2>
+                <div class="description">{{block.settings.desc}}</div>
               </div>
+            </div>
 
-              <div class="block_image grid__item large-up--one-half medium--one-whole">
-                {%- if block.settings.image != blank -%}
-                  {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                  <div class="lazy-image"  style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');">
-                    <img class="lazyload"
-                      style="height: 100%;object-fit: cover;"
-                      alt="{{ block.settings.image.alt }}"
-                      data-src="{{ img_url }}"
-                      data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2450, 2700, 3000, 3350, 3750, 4100]"
-                      data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-                      data-parent-fit="cover"
-                      data-sizes="auto"/>
+            <div class="block_image grid__item {{gridClass}} ">
+              {%- if block.settings.image != blank -%}
+                {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                <div class="lazy-image"  style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');">
+                  <img class="lazyload"
+                    style="height: 100%;object-fit: cover;"
+                    alt="{{ block.settings.image.alt }}"
+                    data-src="{{ img_url }}"
+                    data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2450, 2700, 3000, 3350, 3750, 4100]"
+                    data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                    data-parent-fit="cover"
+                    data-sizes="auto"/>
+                </div>
+                <noscript>
+                  <div class="no-script" style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');" >
+                    <img style="width: 100%;height: 100%;" src="{{block.settings.image | img_url: 'master'}}" alt="{{block.settings.image.alt}}">
                   </div>
-                  <noscript>
-                    <div class="no-script" style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');" >
-                      <img style="width: 100%;height: 100%;" src="{{block.settings.image | img_url: 'master'}}" alt="{{block.settings.image.alt}}">
-                    </div>
-                  </noscript>
-                {%- else -%}
-                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-                {%- endif -%}
-              </div>
+                </noscript>
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
           </div>
         {% comment %} end {% endcomment %}
 
         {%- when 'text' -%}
           <div class="block text grid block-{{block.id}}" {{block.shopify_attributes}}>
-            <div class="grid__item large-up--one-half medium--on-whole">
+            <div class="grid__item large-up--one-half medium--one-whole">
               <div class="left-content">
                 <h2>{{block.settings.title}}</h2>
               </div>
             </div>
-            <div class="grid__item large-up--one-half medium--on-whole">
+            <div class="grid__item large-up--one-half medium--one-whole">
               <div class="right-content">
                 <div class="content">{{block.settings.content}}</div>
                 {%- if block.settings.btn_label != blank -%}
@@ -89,23 +68,25 @@
         {% comment %} end {% endcomment %}
 
         {%- when 'paragraph-list' -%}
-          <div class="block paragraph-list" {{block.shopify_attributes}}>
-            <div class="headline theme">
-              <h2 class="theme">{{block.settings.title}}</h2>
-              <p>{{block.settings.subtitle}}</p>
-            </div>
+          <div class="block paragraph-list block-{{block.id}}" {{block.shopify_attributes}}>
+            <div class="block_wrapper">
+              <div class="headline">
+                <h2>{{block.settings.title}}</h2>
+                <p>{{block.settings.subtitle}}</p>
+              </div>
 
-            <div class="paragraph-list__wrapper">
-              {%- for i in (1..4) -%}
-                {%- liquid
-                  assign title = 'paragraph_title_' | append: i
-                  assign content = 'paragraph_content_' | append: i
-                -%}
-                <div class="paragraph-item">
-                  <div class="title">{{block.settings[title]}}</div>
-                  <div class="content">{{block.settings[content]}}</div>
-                </div>
-              {%- endfor -%}
+              <div class="paragraph-list__wrapper">
+                {%- for i in (1..4) -%}
+                  {%- liquid
+                    assign title = 'paragraph_title_' | append: i
+                    assign content = 'paragraph_content_' | append: i
+                  -%}
+                  <div class="paragraph-item">
+                    <div class="title">{{block.settings[title]}}</div>
+                    <div class="content">{{block.settings[content]}}</div>
+                  </div>
+                {%- endfor -%}
+              </div>
             </div>
 
           </div>
@@ -114,8 +95,12 @@
 
       <style>
         .section-truth .block-{{block.id}} {
-          background-color: {{block.settings.bg_color}};
-          color: {{block.settings.text_color}};
+         {%- if block.settings.bg_color != blank and block.settings.bg_color != 'rgba(0,0,0,0)' -%}
+            background-color: {{block.settings.bg_color}};
+          {%- endif -%}
+          {%- if block.settings.text_color != blank and block.settings.text_color != 'rgba(0,0,0,0)' -%}
+            color: {{block.settings.text_color}};
+          {%- endif -%}
         }
       </style>
     {%- else -%}

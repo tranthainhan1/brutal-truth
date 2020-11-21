@@ -1,0 +1,20 @@
+{%- if image != blank -%}
+  {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+  <div class="lazy-image"  style="padding-top: {{1 | divided_by: image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ image | img_url: '1x1' }}');">
+    <img class="lazyload"
+      style="height: 100%;object-fit: cover;"
+      alt="{{ image.alt }}"
+      data-src="{{ img_url }}"
+      data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2450, 2700, 3000, 3350, 3750, 4100]"
+      data-aspectratio="{{ image.aspect_ratio }}"
+      data-parent-fit="cover"
+      data-sizes="auto"/>
+  </div>
+  <noscript>
+    <div class="no-script" style="padding-top: {{1 | divided_by: image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ image | img_url: '1x1' }}');" >
+      <img style="width: 100%;height: 100%;" src="{{image | img_url: 'master'}}" alt="{{image.alt}}">
+    </div>
+  </noscript>
+{%- else -%}
+  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+{%- endif -%}

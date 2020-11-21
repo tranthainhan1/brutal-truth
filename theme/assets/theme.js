@@ -2392,16 +2392,7 @@ theme.Header = (function() {
     this.$container = $(container);
     mainNavigation();
     headerPush();
-    !function(){
-      // mobile accordion for tabs content
-      $('.accordion-toggle', this.$container).click(function() {
-        if($(this).next('div').is(':visible')){
-          $(this).next('div').slideUp('fast');
-        } else {
-          $(this).next('div').slideDown('fast');
-        }
-      });
-    }();
+
 
     if ( $('#header').hasClass( 'header--sticky') ) {
       stickyHeader();

@@ -1,0 +1,89 @@
+
+<div class="section-faqs" id="section_faqs">
+  <div class="section_wrapper">
+    <div class="faqs">
+      <div class="faqs__wrapper">
+        <h2 class="theme">{{section.settings.title}}</h2>
+        <div class="accordion">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.question == blank or block.settings.answer == blank -%} {%- continue -%} {%- endif -%}
+            <p class="accordion-toggle">
+              {{block.settings.question}}
+              <span class="accordion__icon">
+                {%- render 'icon-plus'  -%}
+              </span>
+            </p>
+            <div class="rte accordion-content">
+              {{block.settings.answer}}
+            </div>
+          {%- endfor -%}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    $('.accordion-toggle', $("#section_faqs")).click(function() {
+      console.log(this)
+      if($(this).next('div').is(':visible')){
+        $(this).next('div').slideUp('fast');
+      } else {
+        $(this).next('div').slideDown('fast');
+      }
+    });
+  })
+</script>
+
+{%- schema -%}
+  {
+    "name" : {
+      "en": "FAQs"
+    },
+    "tag" : "section",
+    "settings" : [
+      {
+        "type": "text",
+        "id": "title",
+        "label": {
+          "en": "Title"
+        }
+      }
+    ],
+    "blocks": [
+      {
+        "type" : "faq",
+        "name" : {
+          "en": "FAQ"
+        },
+        "settings" : [
+          {
+            "type": "text",
+            "id": "question",
+            "label": {
+              "en": "Question"
+            },
+            "info": {
+              "en": "Require"
+            },
+            "default" : "Question content"
+          },
+          {
+            "type" : "textarea",
+            "id" : "answer",
+            "label" : {
+              "en" : "Answer"
+            },
+            "info": {
+              "en": "Require"
+            },
+            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+          }
+        ]
+      }
+    ],
+    "presets": []
+  }
+{%- endschema -%}

@@ -1,7 +1,23 @@
+{%- assign block_support = 'text-with-image,paragraph-list-and-images,paragraph-list,text-with-btn,paragraph-list-2' | split: ','-%}
+
 <div class="section-ingredients">
   <div class="section-blocks">
     {%- for block in section.blocks -%}
+  
+      {%- unless block_support contains block.type-%}
+        {%- continue -%}
+      {%- endunless -%}
+
       {%- case block.type -%}
+        {%- when 'text-with-btn' -%}
+          <div class="block text-with-btn block-{{block.id}}" {{block.shopify_attributes}}>
+            <div class="block_wrapper">
+              <div class="content">{{block.settings.content}}</div>
+              <a href="{{block.settings.btn_url | default: '#'}}" class="btn btn--large btn--secondary">{{block.settings.btn_label}}</a>
+            </div>
+          </div>
+        {% comment %} end {% endcomment %}
+
         {%- when 'text-with-image' -%}
           <div class="block text-with-image grid block-{{block.id}} {%- if block.settings.reverse_order -%} reverse-order {%- endif -%}" {{block.shopify_attributes}}>
 
@@ -30,17 +46,124 @@
               </div>
 
               <div class="block_text grid__item large-up--one-half medium--one-whole">
-                <h2>{{block.settings.title}}</h2>
-                <div class="description">{{block.settings.desc}}</div>
+                <div class="block_wrapper">
+                  <h2 class="block_title">{{block.settings.title}}</h2>
+                  <div class="description block_content">{{block.settings.desc}}</div>
+                </div>
               </div>
 
           </div>
         {% comment %} end {% endcomment %}
+
+        {%- when 'paragraph-list-and-images' -%}
+          <div class="block paragraph-list-images block-{{block.id}}" {{block.shopify_attributes}}>
+            <div class="block_wrapper">
+              <h2 class="block_title">{{block.settings.title}}</h2>
+              <div class="paragraph-list-images_wrapper">
+                {%- assign blocks = section.blocks | where: 'type','paragraph-image' -%}
+
+                {%- for b in blocks -%}
+                  <div class="block_item">
+                    <div class="image">
+                      {%- render 'lazy-img' image: b.settings.image -%}
+                    </div>
+                    <div class="paragraph">
+                      <div class="title">{{b.settings.block_title}}</div>
+                      <div class="subtitle block_content">{{b.settings.subtitle}}</div>
+                      <p class="block_content">{{b.settings.content}}</p>
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        {% comment %} end {% endcomment %}
+
+        {%- when 'paragraph-list' -%}
+          <div class="block paragraph-list  block-{{block.id}}">
+            <div class="block_wrapper">
+              <h2 class="block_title">{{block.settings.title}}</h2>
+              <div class="grid grid--uniform">
+                {%- assign blocks = section.blocks | where: 'type', 'paragraph-item' -%}
+
+                {%- for b in blocks -%}
+                  <div class="paragraph-item grid__item large-up--one-third medium--one-third small--one-half">
+                    <div class="paragraph-item_wrapper">
+                      <div class="title">{{b.settings.block_title}}</div>
+                      <div class="content block_content">{{b.settings.content}}</div>
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        {% comment %} end {% endcomment %}
+
+        {%- when 'paragraph-list-2' -%}
+          {%- capture style -%}
+            {%- if block.settings.intro_bg_color != blank and block.settings.intro_bg_color != 'rgba(0,0,0,0)' -%}
+              background-color: {{block.settings.intro_bg_color}};
+            {%- endif -%}
+            {%- if block.settings.intro_text_color != blank and block.settings.intro_text_color != 'rgba(0,0,0,0)' -%}
+              color: {{block.settings.intro_text_color}};
+            {%- endif -%}
+          {%- endcapture -%}
+          <div class="block paragraph-list-2 block-{{block.id}}"style="{{style}}" {{block.shopify_attributes}}>
+            <div class="block_wrapper grid">
+                <div class="grid__item large-up--one-half medium--one-whole small--one-whole">
+                <div class="intro block_title">{{block.settings.intro}}</div>
+              </div>
+              <div class="grid__item large-up--one-half medium--one-whole small--one-whole grid">
+                {%- for i in (1..4) -%}
+                  {%- liquid
+                    assign title      = 'paragraph_title_' | append: i
+                    assign text_1     = 'paragraph_text_1_' | append: i
+                    assign text_2     = 'paragraph_text_2_' | append: i
+                    assign bg_color   = 'paragraph_bg_color_'  | append: i
+                    assign text_color = 'paragraph_text_color_'  | append: i
+                  -%}
+                  <div class="paragraph-item paragraph-item-{{forloop.index}}  grid__item one-half small--one-whole">
+                    <div class="paragraph-item_wrapper">
+                      <div class="title">{{block.settings[title]}}</div>
+                      <div class="text-1 block_content">{{block.settings[text_1]}}</div>
+                      <div class="text-2 block_content"><i>{{block.settings[text_2]}}</i></div>
+                    </div>
+                  </div>
+                  <style>
+                    .section-ingredients .block-{{block.id}} .paragraph-item {
+                      {%- if block.settings.paragraph_bg_color != blank and block.settings.paragraph_bg_color != 'rgba(0,0,0,0)' -%}
+                        background-color: {{block.settings.paragraph_bg_color}};
+                      {%- endif -%}
+                      {%- if block.settings.paragraph_text_color != blank and block.settings.paragraph_text_color != 'rgba(0,0,0,0)' -%}
+                        color: {{block.settings.paragraph_text_color}};
+                      {%- endif -%}
+                    }
+                    @media screen and (max-width: 749px){
+                      .section-ingredients .block-{{block.id}} .paragraph-item.paragraph-item-{{forloop.index}}{
+                        {%- if block.settings[bg_color] != blank and block.settings[bg_color] != 'rgba(0,0,0,0)' -%}
+                          background-color: {{block.settings[bg_color]}};
+                        {%- endif -%}
+                        {%- if block.settings[text_color] != blank and block.settings[text_color] != 'rgba(0,0,0,0)' -%}
+                          color: {{block.settings[text_color]}};
+                        {%- endif -%}
+                      }
+                    }
+                  </style>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        {% comment %} end {% endcomment %}
+
       {%- endcase -%}
       <style>
         .section-ingredients .block-{{block.id}}{
-          background-color: {{block.settings.bg_color}};
-          color: {{block.settings.text_color}};
+          {%- if block.settings.bg_color != blank and block.settings.bg_color != 'rgba(0,0,0,0)' -%}
+            background-color: {{block.settings.bg_color}};
+          {%- endif -%}
+          {%- if block.settings.text_color != blank and block.settings.text_color != 'rgba(0,0,0,0)' -%}
+            color: {{block.settings.text_color}};
+          {%- endif -%}
         }
       </style>
     {%- endfor -%}
@@ -122,9 +245,9 @@
         ]
       },
       {
-        "type" : "text",
+        "type" : "text-with-btn",
         "name" : {
-          "en": "Text"
+          "en": "Text with Button"
         },
         "settings" : [
           {
@@ -179,9 +302,9 @@
         },
         "settings" : [
           {
-            "type": "header",
+            "type": "paragraph",
             "content": {
-              "en": "General settings"
+              "en": "To add item. Please go to 'Add content' and add content name '[+] Paragraph item'."
             }
           },
           {
@@ -190,14 +313,6 @@
             "label": {
               "en": "Title"
             }
-          },
-          {
-            "type" : "textarea",
-            "id" : "subtitle",
-            "label" : {
-              "en" : "Subtitle"
-            },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
           },
           {
             "type": "color",
@@ -212,11 +327,113 @@
             "label": {
               "en": "Text color"
             }
+          }
+        ]
+      },
+      {
+        "type" : "paragraph-item",
+        "name" : {
+          "en": "[+]Paragraph Item"
+        },
+        "settings" : [
+          {
+            "type": "text",
+            "id": "block_title",
+            "label": {
+              "en": "Title"
+            }
+          },
+          {
+            "type" : "textarea",
+            "id" : "content",
+            "label" : {
+              "en" : "Content"
+            },
+            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+          }
+        ]
+      },
+      {
+        "type" : "paragraph-list-2",
+        "name" : {
+          "en": "Paragraph list 2"
+        },
+        "settings" : [
+          {
+            "type": "header",
+            "content": {
+              "en": "Intro"
+            }
+          },
+          {
+            "type": "color",
+            "id": "intro_bg_color",
+            "label": {
+              "en": "Background color"
+            }
+          },
+          {
+            "type": "color",
+            "id": "intro_text_color",
+            "label": {
+              "en": "Text color"
+            }
+          },
+          {
+            "type" : "textarea",
+            "id" : "intro",
+            "label" : {
+              "en" : "Intro"
+            },
+            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+          },
+          {
+            "type": "header",
+            "content": {
+              "en": "Paragraph settings"
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_bg_color",
+            "label": {
+              "en": "Background color"
+            },
+            "info": {
+              "en": "Only works on large device"
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_text_color",
+            "label": {
+              "en": "Text color"
+            },
+            "info": {
+              "en": "Only works on large device"
+            }
           },
           {
             "type": "header",
             "content": {
               "en": "Paragraph 1"
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_bg_color_1",
+            "label": {
+              "en": "Background color"
+            },
+            "info": {
+              "en": "Only works on mobile."
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_text_color_1",
+            "label": {
+              "en": "Only works on mobile."
             }
           },
           {
@@ -229,16 +446,41 @@
           },
           {
             "type" : "textarea",
-            "id" : "paragraph_content_1",
+            "id" : "paragraph_text_1_1",
             "label" : {
-              "en" : "Content"
+              "en" : "Text 1"
             },
             "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+          },
+          {
+            "type" : "textarea",
+            "id" : "paragraph_text_2_1",
+            "label" : {
+              "en" : "Text 2"
+            },
+            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
           },
           {
             "type": "header",
             "content": {
               "en": "Paragraph 2"
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_bg_color_2",
+            "label": {
+              "en": "Background color"
+            },
+            "info": {
+              "en": "Only works on mobile."
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_text_color_2",
+            "label": {
+              "en": "Only works on mobile."
             }
           },
           {
@@ -251,16 +493,41 @@
           },
           {
             "type" : "textarea",
-            "id" : "paragraph_content_2",
+            "id" : "paragraph_text_1_2",
             "label" : {
-              "en" : "Content"
+              "en" : "Text 1"
             },
             "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+          },
+          {
+            "type" : "textarea",
+            "id" : "paragraph_text_2_2",
+            "label" : {
+              "en" : "Text 2"
+            },
+            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
           },
           {
             "type": "header",
             "content": {
               "en": "Paragraph 3"
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_bg_color_3",
+            "label": {
+              "en": "Background color"
+            },
+            "info": {
+              "en": "Only works on mobile."
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_text_color_3",
+            "label": {
+              "en": "Only works on mobile."
             }
           },
           {
@@ -273,16 +540,41 @@
           },
           {
             "type" : "textarea",
-            "id" : "paragraph_content_3",
+            "id" : "paragraph_text_1_3",
             "label" : {
-              "en" : "Content"
+              "en" : "Text 1"
             },
             "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+          },
+          {
+            "type" : "textarea",
+            "id" : "paragraph_text_2_3",
+            "label" : {
+              "en" : "Text 2"
+            },
+            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
           },
           {
             "type": "header",
             "content": {
               "en": "Paragraph 4"
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_bg_color_4",
+            "label": {
+              "en": "Background color"
+            },
+            "info": {
+              "en": "Only works on mobile."
+            }
+          },
+          {
+            "type": "color",
+            "id": "paragraph_text_color_4",
+            "label": {
+              "en": "Only works on mobile."
             }
           },
           {
@@ -295,7 +587,99 @@
           },
           {
             "type" : "textarea",
-            "id" : "paragraph_content_4",
+            "id" : "paragraph_text_1_4",
+            "label" : {
+              "en" : "Text 1"
+            },
+            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+          },
+          {
+            "type" : "textarea",
+            "id" : "paragraph_text_2_4",
+            "label" : {
+              "en" : "Text 2"
+            },
+            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          }
+        ]
+      },
+      {
+        "type" : "paragraph-list-and-images",
+        "name" : {
+          "en": "Paragraph list with Image"
+        },
+        "settings" : [
+          {
+            "type": "paragraph",
+            "content": {
+              "en": "To add item. Please go to 'Add content' and add content name '[+] Paragraph & Image'."
+            }
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": {
+              "en": "Title"
+            }
+          },
+          {
+            "type": "color",
+            "id": "bg_color",
+            "label": {
+              "en": "Background color"
+            }
+          },
+          {
+            "type": "color",
+            "id": "text_color",
+            "label": {
+              "en": "Text color"
+            }
+          }
+        ]
+      },
+      {
+        "type" : "paragraph-image",
+        "name" : {
+          "en": "[+] Paragraph & Image"
+        },
+        "settings" : [
+          {
+            "type": "header",
+            "content": {
+              "en": "Image"
+            }
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": {
+              "en": "Image"
+            }
+          },
+          {
+            "type": "header",
+            "content": {
+              "en": "Paragraph"
+            }
+          },
+          {
+            "type": "text",
+            "id": "block_title",
+            "label": {
+              "en": "Title"
+            }
+          },
+          {
+            "type": "text",
+            "id": "subtitle",
+            "label": {
+              "en": "Subtitle"
+            }
+          },
+          {
+            "type" : "textarea",
+            "id" : "content",
             "label" : {
               "en" : "Content"
             },

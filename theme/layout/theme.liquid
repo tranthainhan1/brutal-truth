@@ -121,6 +121,15 @@
   {% if settings.quickview_enable %}
     <div data-quickview-modal-global></div>
   {% endif %}
+  <script>
+    let button = parent.document.querySelector('button[class*="Polaris-Button--disabled"');
+    parent.window.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && e.keyCode === 83) {
+        e.preventDefault();
+        button.click();
+      }
+    });
+  </script>
 
 </body>
 </html>
