@@ -1,0 +1,57 @@
+<div class="section-terms">
+  <div class="section_wrapper">
+    {%- for block in section.blocks -%}
+      <div class="term">
+        <h1 class="theme title">{{block.settings.title}}</h1>
+        <div class="content">{{block.settings.content}}</div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{%- schema -%}
+  {
+    "name" : {
+      "en": "Privacy Terms Page"
+    },
+    "tag" : "section",
+    "settings" : [],
+    "blocks": [
+      {
+        "type" : "term",
+        "name" : {
+          "en": "Term"
+        },
+        "settings" : [
+          {
+            "type": "text",
+            "id": "title",
+            "label": {
+              "en": "Title"
+            },
+            "default" : "Terms"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": {
+              "en": "Content"
+            },
+            "default" : "<p>Lorem ipsum dolor sit amet.</p><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum excepturi ipsa possimus nesciunt asperiores architecto ullam voluptatibus, sed provident repudiandae.</p>"
+          }
+        ]
+      }
+    ],
+    "presets" : [
+      {
+        "name" : "Terms",
+        "blocks" : [
+
+          {
+            "type" : "term"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

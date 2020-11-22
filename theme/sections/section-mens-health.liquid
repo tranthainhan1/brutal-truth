@@ -1,4 +1,5 @@
-<div class="section-truth">
+
+<div class="section-mens-health">
   <div class="section_blocks">
     {%- for block in section.blocks -%}
       {%- case block.type -%}
@@ -67,28 +68,21 @@
           </div>
         {% comment %} end {% endcomment %}
 
-        {%- when 'paragraph-list' -%}
-          <div class="block paragraph-list block-{{block.id}}" {{block.shopify_attributes}}>
+        {%- when 'text-with-btn' -%}
+          <div class="block text-with-btn block-{{block.id}}" {{block.shopify_attributes}}>
             <div class="block_wrapper">
-              <div class="headline">
-                <h2>{{block.settings.title}}</h2>
-                <p>{{block.settings.subtitle}}</p>
+              <div class="content">
+                <div class="text-1">
+                  {{block.settings.text_1}}
+                </div>
+                <div class="text-2">
+                  {{block.settings.text_2}}
+                </div>
               </div>
-
-              <div class="paragraph-list__wrapper">
-                {%- for i in (1..4) -%}
-                  {%- liquid
-                    assign title = 'paragraph_title_' | append: i
-                    assign content = 'paragraph_content_' | append: i
-                  -%}
-                  <div class="paragraph-item">
-                    <div class="title">{{block.settings[title]}}</div>
-                    <div class="content">{{block.settings[content]}}</div>
-                  </div>
-                {%- endfor -%}
-              </div>
+              {%- if block.settings.btn_label != blank -%}
+                <a href="{{block.settings.btn_url | default: '#'}}" class="btn btn--large btn--secondary">{{block.settings.btn_label}}</a>
+              {%- endif -%}
             </div>
-
           </div>
         {% comment %} end {% endcomment %}
       {%- endcase -%}
@@ -108,14 +102,53 @@
     {%- endfor -%}
   </div>
 </div>
+
 {%- schema -%}
   {
     "name" : {
-      "en": "The Truth Page"
+      "en": "Mens Health Page"
     },
     "tag" : "section",
     "settings" : [],
     "blocks": [
+      {
+        "type" : "text",
+        "name" : {
+          "en": "Text"
+        },
+        "settings" : [
+          {
+            "type": "richtext",
+            "id": "title",
+            "label": {
+              "en": "Title"
+            },
+            "default" : "<p>Lorem ipsum dolor sit.</p>"
+          },
+          {
+            "type": "color",
+            "id": "bg_color",
+            "label": {
+              "en": "Background color"
+            }
+          },
+          {
+            "type": "color",
+            "id": "text_color",
+            "label": {
+              "en": "Text color"
+            }
+          },
+          {
+            "type" : "richtext",
+            "id" : "content",
+            "label" : {
+              "en" : "Content"
+            },
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
+          }
+        ]
+      },
       {
         "type" : "text-with-image",
         "name" : {
@@ -150,11 +183,12 @@
             }
           },
           {
-            "type": "text",
+            "type": "richtext",
             "id": "title",
             "label": {
               "en": "Title"
-            }
+            },
+            "default" : "<p>Lorem ipsum dolor sit.</p>"
           },
           {
             "type" : "richtext",
@@ -180,9 +214,9 @@
         ]
       },
       {
-        "type" : "text",
+        "type" : "text-with-btn",
         "name" : {
-          "en": "Text"
+          "en": "Text with Button"
         },
         "settings" : [
           {
@@ -208,11 +242,19 @@
           },
           {
             "type" : "richtext",
-            "id" : "content",
+            "id" : "text_1",
             "label" : {
-              "en" : "Content"
+              "en" : "Text 1"
             },
             "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
+          },
+          {
+            "type" : "richtext",
+            "id" : "text_2",
+            "label" : {
+              "en" : "Text 2"
+            },
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
           },
           {
             "type": "text",
