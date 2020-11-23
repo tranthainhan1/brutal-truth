@@ -1,0 +1,83 @@
+<div class="section-popup-box" id="popup_box" style="display: none;">
+  <div class="section_wrapper">
+    <div class="image">
+      {%- render 'lazy-image' image: section.settings.image -%}
+    </div>
+    <div class="content">
+      {%- if section.settings.title != blank -%}
+        <h2 class="theme">{{section.settings.title}}</h2>
+      {%- endif -%}
+      {%- if section.settings.desc != blank -%}
+        <div class="description">{{section.settings.desc}}</div>
+      {%- endif -%}
+      {%- if section.settings.btn_label != blank -%}
+        <a href="{{section.settings.btn_link}}">{{section.settings.btn_label}}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    let popup = $('popup_box');
+    let bodyHeight = document.body.offsetHeight;
+    let breakPointShow = bodyHeight / 2
+
+    document.addEventListener('scroll', function(){
+      if(window.pageYOffset > breakPointShow)
+    })
+
+  })
+</script>
+
+{%- schema -%}
+  {
+    "name" : {
+      "en": "Popup Box"
+    },
+    "tag" : "section",
+    "settings" : [
+      {
+        "type": "text",
+        "id": "title",
+        "label": {
+          "en": "Title"
+        }
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": {
+          "en": "Image"
+        }
+      },
+      {
+        "type": "richtext",
+        "id": "desc",
+        "label": {
+          "en": "Description"
+        }
+      },
+      {
+        "type": "header",
+        "content": {
+          "en": "Button"
+        }
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": {
+          "en": "Button label"
+        }
+      },
+      {
+        "type" : "url",
+        "id" : "btn_link",
+        "label" : {
+          "en": "Button link"
+        }
+      }
+    ]
+  }
+{%- endschema -%}

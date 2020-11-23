@@ -27,11 +27,12 @@
 <script>
   document.addEventListener('DOMContentLoaded', function(){
     $('.accordion-toggle', $("#section_faqs")).click(function() {
-      console.log(this)
       if($(this).next('div').is(':visible')){
         $(this).next('div').slideUp('fast');
+        $(this).removeClass('active')
       } else {
         $(this).next('div').slideDown('fast');
+        $(this).addClass('active');
       }
     });
   })

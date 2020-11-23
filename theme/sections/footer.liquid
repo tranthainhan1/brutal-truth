@@ -49,12 +49,16 @@
       {% endcase %}
 
       {% for block in section.blocks %}
+        {%- liquid
+          assign content_align = block.settings.content_align
+          assign block_order = block.settings.order
+        -%}
         {% case block.type %}
 
           {% when 'linklist' %}
             {% assign linklist = linklists[block.settings.linklist] %}
-            <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-              <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ linklist.title }} </h2>
+            <div class="footer__block grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
+              <h2 class="h5 footer__block__title caps ">{{ linklist.title }} </h2>
 
               <ul class="footer__quicklinks unstyled">
                 {% for link in linklist.links %}
@@ -66,23 +70,23 @@
           {% when 'page' %}
             {% assign page = pages[block.settings.page] %}
             {% if page == blank or page.empty? %}
-              <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-                <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ shop.name }}</h2>
+              <div class="footer__block grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
+                <h2 class="h5 footer__block__title caps">{{ shop.name }}</h2>
 
                 <div class="rte">{{ 'home_page.onboarding.no_content' | t }}</div>
               </div>
             {% else %}
               <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-                <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ page.title | escape }}</h2>
+                <h2 class="h5 footer__block__title caps">{{ page.title | escape }}</h2>
 
                 <div class="rte">{{ page.content }}</div>
               </div>
             {% endif %}
 
           {% when 'social' %}
-            <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
+            <div class="footer__block grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
               {%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Tumblr, YouTube, Vimeo,' | split: ', ' -%}
-              <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ block.settings.title | escape }}</h2>
+              <h2 class="h5 footer__block__title caps">{{ block.settings.title | escape }}</h2>
 
               {% if block.settings.richtext != '<p></p>' %}
                 <div class="rte footer__social__text">
@@ -95,15 +99,15 @@
             </div>
 
           {% when 'text' %}
-            <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-              <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ block.settings.title | escape }}</h2>
+            <div class="footer__block grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
+              <h2 class="h5 footer__block__title caps">{{ block.settings.title | escape }}</h2>
 
               <div class="rte">{{ block.settings.text }}</div>
             </div>
 
           {% when 'newsletter' %}
-            <div class="footer__block grid__item {{ footer_column_width }}" {{ block.shopify_attributes }}>
-              <h2 class="h5 footer__block__title caps text-{{block.settings.heading_align}}">{{ 'layout.footer.newsletter_title' | t }}</h2>
+            <div class="footer__block footer-newsletter grid__item {{ footer_column_width }} content-{{content_align}}" {{ block.shopify_attributes }}>
+              <h2 class="h5 footer__block__title caps text-{{content_align}}">{{ 'layout.footer.newsletter_title' | t }}</h2>
 
               <div class="rte footer__newsletter__text">
                 {{ block.settings.richtext }}
@@ -160,7 +164,7 @@
       {% endfor %}
     </div>
 
-    <div class="grid footer-bottom">
+    <div class="footer-bottom">
     {% comment %} grid__item {% if section.settings.footer_payment_enable %}medium-up--two-thirds{% endif %} {% endcomment %}
       <div class="footer__secondary">
         <div class="left-content small--hide">
@@ -373,17 +377,10 @@
       "name": "Link list",
       "settings": [
         {
-          "type": "link_list",
-          "id": "linklist",
-          "label": "Link list",
-          "default": "footer",
-          "info": "This menu won't show dropdown items"
-        },
-        {
           "type": "select",
-          "id": "heading_align",
+          "id": "content_align",
           "label" : {
-            "en" : "Heading alignment"
+            "en" : "Content align"
           },
           "options": [
            {
@@ -404,7 +401,29 @@
                "en": "Right"
              }
            }
-          ]
+          ],
+          "default" : "center"
+        },
+        {
+          "type" : "range",
+          "id": "order",
+          "label": {
+            "en" : "Order"
+          },
+          "step": 1,
+          "min" : 1,
+          "max" : 4,
+          "default" : 1,
+          "info": {
+            "en": "Only works on mobile"
+          }
+        },
+        {
+          "type": "link_list",
+          "id": "linklist",
+          "label": "Link list",
+          "default": "footer",
+          "info": "This menu won't show dropdown items"
         }
       ]
     },
@@ -415,13 +434,15 @@
       "settings": [
         {
           "type": "paragraph",
-          "content": "Subscribers are under 'Accepts Marketing' in your [customer admin](/admin/customers)."
+          "content": {
+            "en": "Klaviyo: [Sign up](https:\/\/www.klaviyo.com\/register)"
+          }
         },
-        {
+       {
           "type": "select",
-          "id": "heading_align",
+          "id": "content_align",
           "label" : {
-            "en" : "Heading alignment"
+            "en" : "Content align"
           },
           "options": [
            {
@@ -442,7 +463,22 @@
                "en": "Right"
              }
            }
-          ]
+          ],
+          "default" : "center"
+        },
+        {
+          "type" : "range",
+          "id": "order",
+          "label": {
+            "en" : "Order"
+          },
+          "step": 1,
+          "min" : 1,
+          "max" : 4,
+          "default" : 1,
+          "info": {
+            "en": "Only works on mobile"
+          }
         },
         {
           "id": "richtext",
@@ -464,16 +500,10 @@
       "name": "Social",
       "settings": [
         {
-          "type": "text",
-          "id": "title",
-          "label": "Heading",
-          "default": "Social"
-        },
-        {
           "type": "select",
-          "id": "heading_align",
+          "id": "content_align",
           "label" : {
-            "en" : "Heading alignment"
+            "en" : "Content align"
           },
           "options": [
            {
@@ -494,7 +524,28 @@
                "en": "Right"
              }
            }
-          ]
+          ],
+          "default" : "center"
+        },
+        {
+          "type" : "range",
+          "id": "order",
+          "label": {
+            "en" : "Order"
+          },
+          "step": 1,
+          "min" : 1,
+          "max" : 4,
+          "default" : 1,
+          "info": {
+            "en": "Only works on mobile"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Social"
         },
         {
           "type": "richtext",
@@ -509,16 +560,10 @@
       "name": "Text",
       "settings": [
         {
-          "type": "text",
-          "id": "title",
-          "label": "Heading",
-          "default": "Text"
-        },
-        {
           "type": "select",
-          "id": "heading_align",
+          "id": "content_align",
           "label" : {
-            "en" : "Heading alignment"
+            "en" : "Content align"
           },
           "options": [
            {
@@ -539,7 +584,28 @@
                "en": "Right"
              }
            }
-          ]
+          ],
+          "default" : "center"
+        },
+        {
+          "type" : "range",
+          "id": "order",
+          "label": {
+            "en" : "Order"
+          },
+          "step": 1,
+          "min" : 1,
+          "max" : 4,
+          "default" : 1,
+          "info": {
+            "en": "Only works on mobile"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Text"
         },
         {
           "type": "richtext",
@@ -553,6 +619,48 @@
       "type": "page",
       "name": "Page",
       "settings": [
+          {
+          "type": "select",
+          "id": "content_align",
+          "label" : {
+            "en" : "Content align"
+          },
+          "options": [
+           {
+              "value": "left",
+              "label": {
+                "en": "Left"
+              }
+           },
+           {
+             "value": "center",
+             "label": {
+               "en": "Center"
+             }
+           },
+           {
+             "value": "right",
+             "label": {
+               "en": "Right"
+             }
+           }
+          ],
+          "default" : "center"
+        },
+        {
+          "type" : "range",
+          "id": "order",
+          "label": {
+            "en" : "Order"
+          },
+          "step": 1,
+          "min" : 1,
+          "max" : 4,
+          "default" : 1,
+          "info": {
+            "en": "Only works on mobile"
+          }
+        },
         {
           "id": "page",
           "type": "page",

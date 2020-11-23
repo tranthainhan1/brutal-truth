@@ -11,7 +11,7 @@
      data-cart-bar="{{ section.settings.show_cart_bar }}"
      data-cart-bar-position="{{ section.settings.cart_bar_position }}"
      data-video-looping="{{ section.settings.enable_video_looping }}">
-  {%- render 'product' product: product, section: section, unique: section.id -%}
+  {%- include 'product' product: product, section: section, unique: section.id -%}
 
   {%- if section.settings.show_cart_bar -%}
     <!-- /partials/cart-bar.liquid -->

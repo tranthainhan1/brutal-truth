@@ -20,7 +20,7 @@
           <div class="block {{isRichtext}} text-with-image grid block-{{block.id}} {%- if block.settings.reverse_order -%} reverse-order {%- endif -%}" {{block.shopify_attributes}}>
             <div class="block_text grid__item {{gridClass}} ">
               <div class="block_text_wrapper">
-                <h2>{{block.settings.title}}</h2>
+                <h2 class="block_title">{{block.settings.title}}</h2>
                 <div class="description">{{block.settings.desc}}</div>
               </div>
             </div>
@@ -54,7 +54,7 @@
           <div class="block text grid block-{{block.id}}" {{block.shopify_attributes}}>
             <div class="grid__item large-up--one-half medium--one-whole">
               <div class="left-content">
-                <h2>{{block.settings.title}}</h2>
+                <h2 class="block_title">{{block.settings.title}}</h2>
               </div>
             </div>
             <div class="grid__item large-up--one-half medium--one-whole">
@@ -85,10 +85,11 @@
             </div>
           </div>
         {% comment %} end {% endcomment %}
+
       {%- endcase -%}
 
       <style>
-        .section-truth .block-{{block.id}} {
+        .section-mens-health .block-{{block.id}} {
          {%- if block.settings.bg_color != blank and block.settings.bg_color != 'rgba(0,0,0,0)' -%}
             background-color: {{block.settings.bg_color}};
           {%- endif -%}
@@ -118,12 +119,12 @@
         },
         "settings" : [
           {
-            "type": "richtext",
+            "type": "textarea",
             "id": "title",
             "label": {
               "en": "Title"
             },
-            "default" : "<p>Lorem ipsum dolor sit.</p>"
+            "default" : "Lorem ipsum dolor sit."
           },
           {
             "type": "color",
@@ -183,12 +184,12 @@
             }
           },
           {
-            "type": "richtext",
+            "type": "textarea",
             "id": "title",
             "label": {
               "en": "Title"
             },
-            "default" : "<p>Lorem ipsum dolor sit.</p>"
+            "default" : "Lorem ipsum dolor sit."
           },
           {
             "type" : "richtext",
@@ -220,7 +221,7 @@
         },
         "settings" : [
           {
-            "type": "text",
+            "type": "textarea",
             "id": "title",
             "label": {
               "en": "Title"
@@ -285,7 +286,7 @@
             }
           },
           {
-            "type": "text",
+            "type": "textarea",
             "id": "title",
             "label": {
               "en": "Title"

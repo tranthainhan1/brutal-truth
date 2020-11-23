@@ -3,7 +3,7 @@
 <div class="section-ingredients">
   <div class="section-blocks">
     {%- for block in section.blocks -%}
-  
+
       {%- unless block_support contains block.type-%}
         {%- continue -%}
       {%- endunless -%}
@@ -13,7 +13,9 @@
           <div class="block text-with-btn block-{{block.id}}" {{block.shopify_attributes}}>
             <div class="block_wrapper">
               <div class="content">{{block.settings.content}}</div>
-              <a href="{{block.settings.btn_url | default: '#'}}" class="btn btn--large btn--secondary">{{block.settings.btn_label}}</a>
+              {%- if block.settings.btn_label != blank -%}
+                <a href="{{block.settings.btn_url | default: '#'}}" class="btn btn--large btn--secondary">{{block.settings.btn_label}}</a>
+              {%- endif -%}
             </div>
           </div>
         {% comment %} end {% endcomment %}
@@ -63,14 +65,14 @@
                 {%- assign blocks = section.blocks | where: 'type','paragraph-image' -%}
 
                 {%- for b in blocks -%}
-                  <div class="block_item">
+                  <div class="block_item" {{b.shopify_attributes}}>
                     <div class="image">
                       {%- render 'lazy-img' image: b.settings.image -%}
                     </div>
                     <div class="paragraph">
                       <div class="title">{{b.settings.block_title}}</div>
                       <div class="subtitle block_content">{{b.settings.subtitle}}</div>
-                      <p class="block_content">{{b.settings.content}}</p>
+                      <div class="block_content">{{b.settings.content}}</div>
                     </div>
                   </div>
                 {%- endfor -%}
@@ -80,14 +82,14 @@
         {% comment %} end {% endcomment %}
 
         {%- when 'paragraph-list' -%}
-          <div class="block paragraph-list  block-{{block.id}}">
+          <div class="block paragraph-list  block-{{block.id}}" {{block.shopify_attributes}}>
             <div class="block_wrapper">
               <h2 class="block_title">{{block.settings.title}}</h2>
               <div class="grid grid--uniform">
                 {%- assign blocks = section.blocks | where: 'type', 'paragraph-item' -%}
 
                 {%- for b in blocks -%}
-                  <div class="paragraph-item grid__item large-up--one-third medium--one-third small--one-half">
+                  <div class="paragraph-item grid__item large-up--one-third medium--one-third small--one-half" {{b.shopify_attributes}}>
                     <div class="paragraph-item_wrapper">
                       <div class="title">{{b.settings.block_title}}</div>
                       <div class="content block_content">{{b.settings.content}}</div>
@@ -199,16 +201,6 @@
             }
           },
           {
-            "type": "text",
-            "id": "height",
-            "label": {
-              "en": "Height"
-            },
-            "info": {
-              "en": "Please only enter number."
-            }
-          },
-          {
             "type": "header",
             "content": {
               "en": "Text"
@@ -222,12 +214,12 @@
             }
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "desc",
             "label" : {
               "en" : "Description"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
           },
           {
             "type": "header",
@@ -272,12 +264,12 @@
             }
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "content",
             "label" : {
               "en" : "Content"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
           },
           {
             "type": "text",
@@ -297,6 +289,7 @@
       },
       {
         "type" : "paragraph-list",
+        "limit" : 1,
         "name" : {
           "en": "Paragraph list"
         },
@@ -333,7 +326,7 @@
       {
         "type" : "paragraph-item",
         "name" : {
-          "en": "[+]Paragraph Item"
+          "en": "[+] Paragraph Item"
         },
         "settings" : [
           {
@@ -344,12 +337,12 @@
             }
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "content",
             "label" : {
               "en" : "Content"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
           }
         ]
       },
@@ -433,6 +426,9 @@
             "type": "color",
             "id": "paragraph_text_color_1",
             "label": {
+              "en": "Text color"
+            },
+            "info": {
               "en": "Only works on mobile."
             }
           },
@@ -445,20 +441,20 @@
             "default" : "Title"
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "paragraph_text_1_1",
             "label" : {
               "en" : "Text 1"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "paragraph_text_2_1",
             "label" : {
               "en" : "Text 2"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
           },
           {
             "type": "header",
@@ -480,6 +476,9 @@
             "type": "color",
             "id": "paragraph_text_color_2",
             "label": {
+              "en": "Text color"
+            },
+            "info": {
               "en": "Only works on mobile."
             }
           },
@@ -492,20 +491,20 @@
             "default" : "Title"
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "paragraph_text_1_2",
             "label" : {
               "en" : "Text 1"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "paragraph_text_2_2",
             "label" : {
               "en" : "Text 2"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
           },
           {
             "type": "header",
@@ -527,6 +526,9 @@
             "type": "color",
             "id": "paragraph_text_color_3",
             "label": {
+              "en": "Text color"
+            },
+            "info": {
               "en": "Only works on mobile."
             }
           },
@@ -539,20 +541,20 @@
             "default" : "Title"
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "paragraph_text_1_3",
             "label" : {
               "en" : "Text 1"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "paragraph_text_2_3",
             "label" : {
               "en" : "Text 2"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
           },
           {
             "type": "header",
@@ -574,6 +576,9 @@
             "type": "color",
             "id": "paragraph_text_color_4",
             "label": {
+              "en": "Text color"
+            },
+            "info": {
               "en": "Only works on mobile."
             }
           },
@@ -586,25 +591,26 @@
             "default" : "Title"
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "paragraph_text_1_4",
             "label" : {
               "en" : "Text 1"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "paragraph_text_2_4",
             "label" : {
               "en" : "Text 2"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit."
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
           }
         ]
       },
       {
         "type" : "paragraph-list-and-images",
+        "limit" : 1,
         "name" : {
           "en": "Paragraph list with Image"
         },
@@ -678,12 +684,12 @@
             }
           },
           {
-            "type" : "textarea",
+            "type" : "richtext",
             "id" : "content",
             "label" : {
               "en" : "Content"
             },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+            "default" : "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!</p>"
           }
         ]
       }

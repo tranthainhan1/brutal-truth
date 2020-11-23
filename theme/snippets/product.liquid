@@ -126,6 +126,9 @@
               <div class="product__afterpay">
                 {%- render 'afterpay' -%}
               </div>
+              <div class="product__subscription">
+                <div class="ro_widget"></div>
+              </div>
             </div>
 
             {%- if settings.enable_product_reviews -%}
@@ -187,7 +190,7 @@
               {%- if settings.enable_yotpo and settings.yotpo_ID != '' -%}
                 <!-- /partials/yotpo-reviews.liquid -->
 
-<div class="yotpo yotpo-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_media.preview_image | img_url: '1024x' |replace: '?', '%3F' | replace: '&','%26'}}" data-description="{{ product.description | escape }}"></div>
+                <div class="yotpo yotpo-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_media.preview_image | img_url: '1024x' |replace: '?', '%3F' | replace: '&','%26'}}" data-description="{{ product.description | escape }}"></div>
 
               {%- else -%}
                 <div class="product__reviews" id="reviews-scroll">

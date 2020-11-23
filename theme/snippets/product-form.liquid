@@ -4,11 +4,11 @@
 {%- assign enable_variant_lines = settings.variant_lines -%}
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 
-{% comment %} 
-  This is for sections/product and sections/index-product 
+{% comment %}
+  This is for sections/product and sections/index-product
 {% endcomment %}
 {%- assign buybutton_setting = section.settings.show_payment_button -%}
-{% comment %} 
+{% comment %}
   This is for templates/ajax_quickview
 {% endcomment %}
 {%- if buybutton_setting == nil -%}
@@ -208,7 +208,7 @@
       <button
         type="submit"
         name="add"
-        class="btn product__submit__add"
+        class="btn product__submit__add addtocart"
         data-add-to-cart
         {% unless current_variant.available %}disabled="disabled"{% endunless %}>
         <span data-add-to-cart-text>
