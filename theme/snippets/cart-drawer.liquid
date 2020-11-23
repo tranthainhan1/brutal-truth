@@ -1,0 +1,233 @@
+{% comment %} translations {% endcomment %}
+{% assign your_cart_t = 'drawer.cart.your_cart' | t %}
+{% assign total_t = 'drawer.cart.total' | t %}
+{% assign subtotal_t = 'drawer.cart.subtotal' | t %}
+{% assign remove_t = 'drawer.cart.remove' | t %}
+{% assign order_notes_t = 'drawer.cart.order_notes' | t %}
+{% assign shipping_taxes_t = 'drawer.cart.shipping_taxes_notification' | t %}
+{% assign continue_t = 'drawer.cart.continue' | t %}
+{% assign checkout_t = 'drawer.cart.checkout' | t %}
+{% assign empty_html_t = 'drawer.cart.empty_html' | t %}
+
+{% assign has_items = false %}
+{% if cart.item_count > 0 %}
+  {% assign has_items = true %}
+{% endif %}
+
+<div class="cart-drawer" id="cart_drawer" data-has-items="{{has_items}}">
+  <div class="overlay js-cart-drawer-close" id="cart_drawer_overlay"></div>
+
+  <div class="cart-drawer_wrapper">
+    <div class="cart-drawer_header">
+      <h1>{{ your_cart_t }}</h1>
+    </div>
+    <form class="cart-form" action="/cart" method="post" novalidate="">
+      <div class="cart-form_body">
+        {% for item in cart.items %}
+          <div class="cart-item"data-variant-id="{{ item.variant_id }}"data-item-key="{{ item.key }}">
+            <div class="cart-item_title">
+              <a href="{{ item.url }}">{{ item.product.title }}</a>
+            </div>
+
+            <div class="cart-item_image">
+              <a href="{{ item.url }}">
+                {% render "lazy-img", image: item.product.featured_media.preview_image %}
+              </a>
+            </div>
+
+            <div class="cart-item_info">
+              {% unless item.variant.title contains 'Default' %}
+                <div class="font--paragraph">
+                  <a href="{{ item.url }}">{{ item.variant.title }}</a>
+                </div>
+              {% endunless %}
+
+              {% assign property_size = item.properties | size %}
+              {% if property_size > 0 %}
+                <div class="cart-item_properties">
+                {% for p in item.properties %}
+                  {% unless p.last == blank %}
+                    <br>
+                    {{ p.first }}:
+                    {% comment %} Check if there was an uploaded file associated {% endcomment %}
+                    {% if p.last contains '/uploads/' %}
+                      <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                    {% else %}
+                      {{ p.last }}
+                    {% endif %}
+                  {% endunless %}
+                {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="cart-item_price">
+                {% if item.original_line_price > item.final_line_price %}
+                  <div class="cart-item_orig-price">
+                    <span class="money">{{ item.original_line_price | money }}</span>
+                  </div>
+                {% endif %}
+
+                <div class="cart-item_total">{{ item.final_line_price | money }}</div>
+
+                {% if item.line_level_discount_allocations.size > 0 %}
+                  <div class="cart-item_discounts">
+                    {% for discount_allocation in item.line_level_discount_allocations %}
+                      {{ discount_allocation.discount_application.title }}&nbsp;
+                      (–<span class="money">{{ discount_allocation.amount | money }}</span>)
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="cart-item_quantity">
+                <div class="cart--quantity--container input--number">
+                  <a tabindex="0" class="minus" href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1}}">
+                    <svg class="icon-root icon-minus" viewBox="0 0 10 2">
+                      <path d="M.5 1.6h9V.4h-9z" fill-rule="nonzero" />
+                    </svg>
+                  </a>
+                  <input class="cart--quantity--input"type="text"name="updates[]"id="updates_{{ item.id }}"value="{{ item.quantity }}"min="1"pattern="[1-9]*"/>
+                  <a class="plus"tabindex="0"href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1}}">
+                    <svg class="icon-root icon-plus" viewBox="0 0 10 10">
+                      <path d="M4.4 4.4V.5h1.2v3.9h3.9v1.2H5.6v3.9H4.4V5.6H.5V4.4h3.9z" fill-rule="nonzero" />
+                    </svg>
+                  </a>
+                </div>
+
+                <div class="cart-item_remove">
+                  <a href="/cart/change?line={{ forloop.index }}&quantity=0"class="remove"aria-label="{{ remove_t }}"title="{{ remove_t }}">
+                    {{ remove_t }}
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="cart-footer">
+        {%- if settings.cart_notes -%}
+          <div class="cart-notes">
+            <label for="cart-note">{{ order_notes_t }}</label>
+            <textarea id="cart-note" name="note">{{ cart.note }}</textarea>
+          </div>
+        {%- endif -%}
+        <div class="cart-totals">
+          {%- if cart.cart_level_discount_applications != blank -%}
+            <div class="cart-subtotal">
+              <div class="cart-subtotal_heading">{{ subtotal_t }}</div>
+              <div class="cart-subtotal_money">{{ cart.items_subtotal_price | money }}</div>
+            </div>
+            {% comment %}
+              <div class="cart-discounts">
+                <ul>
+                {%- for discount_application in cart.cart_level_discount_applications -%}
+                  <li>
+                    <div class="font--accent">{{ discount_application.title }}</div>
+                    <span class="font--light-accent">
+                      –<span class="money">{{ discount_application.total_allocated_amount | money }}
+                      </span>
+                    </span>
+                  </li>
+                {%- endfor -%}
+                </ul>
+              </div>
+            {% endcomment %}
+          {%- endif -%}
+          <!-- Final cart total -->
+          <div class="cart-total">
+            <div class="cart-total_heading">{{ total_t }}</div>
+            <div class="cart-total_price">{{ cart.total_price | money }}</div>
+          </div>
+
+          <div class="cart-tax-info">
+            {{ shipping_taxes_t }}
+          </div>
+
+          <div class="cart--nav">
+            <div class="cart-continue-shopping">
+              <a href="{{ shop.url }}/collections/all">
+                {{ continue_t }}
+              </a>
+            </div>
+
+            <button class="cart-checkout-button" type="submit" name="checkout">
+              {{ checkout_t }}
+            </button>
+          </div>
+
+        {% if additional_checkout_buttons %}
+          <div class="cart-additional-buttons additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
+        {% endif %}
+
+        </div>
+      </div>
+    </form>
+
+    <div class="cart--no-items">{{ empty_html_t }}</div>
+  </div>
+</div>
+
+<style>
+  #cart_drawer{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1001;
+    visibility: hidden;
+  }
+  #cart_drawer.open{
+    visibility: visible;
+  }
+  #cart_drawer .cart-drawer_wrapper{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transform: translateX(100%);
+    transition: all 0.6s;
+    background-color: #fff;
+  }
+  #cart_drawer.open .cart-drawer_wrapper{
+    transform: translateX(0%);
+  }
+  #cart_drawer.open .overlay{
+    opacity: 1;
+  }
+  #cart_drawer .overlay{
+    background-color: rgba(0,0,0,0.5);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transition: all 0.6s;
+    opacity: 0;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    let cartDrawer = $('#cart_drawer');
+    let openCartDrawer =  $('.js-cart-drawer-open');
+    let closeCartDrawer =  $('.js-cart-drawer-close');
+    let btnQtyMinus = $('#cart_drawer .cart-item_quantity .minus');
+    let btnQtyPlus = $('#cart_drawer .cart-item_quantity .plus');
+
+    btnQtyMinus.click( function(){
+      $(this).preventDefault();
+      $(this).next().value(function(index,value){
+        console.log(index, value);
+      })
+    });
+    openCartDrawer.click(function(){
+      cartDrawer.addClass('open');
+    })
+    closeCartDrawer.click(function(){
+      cartDrawer.removeClass('open');
+    })
+  })
+</script>

@@ -1,7 +1,8 @@
 <div class="section-popup-box" id="popup_box" style="display: none;">
+  <div class="overlay" id="popup_box_overlay"></div>
   <div class="section_wrapper">
     <div class="image">
-      {%- render 'lazy-image' image: section.settings.image -%}
+      {%- render 'lazy-img' image: section.settings.image -%}
     </div>
     <div class="content">
       {%- if section.settings.title != blank -%}
@@ -11,21 +12,81 @@
         <div class="description">{{section.settings.desc}}</div>
       {%- endif -%}
       {%- if section.settings.btn_label != blank -%}
-        <a href="{{section.settings.btn_link}}">{{section.settings.btn_label}}</a>
+        <a href="{{section.settings.btn_link}}" class="btn btn--large btn--secondary caps">{{section.settings.btn_label}}</a>
       {%- endif -%}
     </div>
   </div>
 </div>
 
+<style>
+  #popup_box.section-popup-box{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+  }
+  .section-popup-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.section-popup-box .section_wrapper {
+  height: 500px;
+  width: 500px;
+  position: relative;
+  z-index: 1000;
+}
+#popup_box_overlay{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+</style>
+<script type="text/javascript">
+    function setCookie(key, value, expiry) {
+        var expires = new Date();
+        expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+    }
+
+    function getCookie(key) {
+        var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+        return keyValue ? keyValue[2] : null;
+    }
+
+    function eraseCookie(key) {
+        var keyValue = getCookie(key);
+        setCookie(key, keyValue, '-1');
+    }
+
+</script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function(){
-    let popup = $('popup_box');
-    let bodyHeight = document.body.offsetHeight;
-    let breakPointShow = bodyHeight / 2
 
-    document.addEventListener('scroll', function(){
-      if(window.pageYOffset > breakPointShow)
-    })
+    if(getCookie('show-popup-box') == null){
+      let popup = $('#popup_box');
+      let closePopup = $('#popup_box_overlay');
+      let bodyHeight = document.body.offsetHeight;
+      let breakPointShow = bodyHeight / 2;
+
+      closePopup.click(function(){
+        popup.fadeOut(600);
+        document.removeEventListener('scroll',scrollHandle);
+        setCookie('show-popup-box', 1, 3);
+      });
+
+      document.addEventListener('scroll', scrollHandle);
+
+      function scrollHandle(){
+        if((window.pageYOffset + window.innerHeight) > breakPointShow){
+          popup.fadeIn(600);
+        }
+      }
+    }
 
   })
 </script>

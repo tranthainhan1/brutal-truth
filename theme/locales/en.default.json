@@ -374,5 +374,22 @@
     "checkout": "Checkout",
     "continue_shopping": "Continue Shopping",
     "view_cart": "View Cart"
+  },
+  "drawer" : {
+    "cart": {
+      "your_cart": "Your Cart",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "remove": "Remove",
+      "minus": "Minus",
+      "plus": "Plus",
+      "order_notes": "Leave a note with your order",
+      "shipping_taxes_notification": "Shipping & taxes calculated at checkout",
+      "continue": "Continue Shopping",
+      "checkout": "Checkout",
+      "empty_html": "<span class=\"rte-content\">Your cart is currently empty.<\/span>"
+    }
   }
 }

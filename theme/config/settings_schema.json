@@ -367,6 +367,40 @@
     ]
   },
   {
+    "name" : "Cart",
+    "settings" : [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label" : {
+          "en" : "type"
+        },
+        "options": [
+         {
+            "value": "page",
+            "label": {
+              "en": "Page"
+            }
+         },
+         {
+           "value": "drawer",
+           "label": {
+             "en": "Drawer"
+           }
+         }
+        ]
+      },
+      {
+        "type" : "checkbox",
+        "id" : "cart_notes",
+        "label" : {
+          "en": "Enable order notes"
+        },
+        "default" : true
+      }
+    ]
+  },
+  {
     "name": "Product grid",
     "settings": [
       {

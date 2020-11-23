@@ -77,8 +77,9 @@
 <script type="text/javascript">(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/{{ settings.yotpo_ID }}/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();</script>
 
   {% endif %}
-  {%- render 'bold-ro-init' -%}
-  {%- render 'bold-common' -%}
+{%- render 'bold-common' -%}
+{%- render 'bold-ro-init' -%}
+
 </head>
 <body id="{{ page_title | handle }}" class="template-{{ template.name | handle }}{% if template.name != 'index' %} template-{{template.suffix}} {% endif %}{% if customer %} customer-logged-in{% endif %}" data-promo="{{ settings.show_promo_modal }}" data-animations="{{ settings.animations_enable }}">
 
@@ -96,6 +97,9 @@
   </div>
   {%- section 'section-popup-box' -%}
   {% section 'footer' %}
+  {%- if settings.cart_type == 'drawer' -%}
+    {%- render 'cart-drawer'  -%}
+  {%- endif -%}
 
   {%- if template.name == 'article' or template.name == 'blog' -%}
     {% if settings.enable_disqus %}
