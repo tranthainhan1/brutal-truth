@@ -253,27 +253,14 @@
           </span>
         </a>
       {% endif %}
+      <a href="{{ routes.cart_url }}" class="header__cart__wrapper" id="CartButton" title="{{ 'cart.general.title' | t }}">
+        <span class="header__cart__icon__wrapper">
+          <span>{{ 'layout.cart.title' | t }}</span>
+          {% comment %} <span class="oi header__cart__icon" data-glyph="cart"></span> {% endcomment %}
 
-      {%- case settings.cart_type -%}
-        {%- when 'page' -%}
-          <a href="{{ routes.cart_url }}" class="header__cart__wrapper" id="CartButton" title="{{ 'cart.general.title' | t }}">
-            <span class="header__cart__icon__wrapper">
-              <span>{{ 'layout.cart.title' | t }}</span>
-              {% comment %} <span class="oi header__cart__icon" data-glyph="cart"></span> {% endcomment %}
-
-              <span class="cart-count-js header__cart__count">{{ cart.item_count }}</span>
-            </span>
-          </a>
-        {%- when 'drawer' -%}
-          <a href="#" onclick="return false" class="js-cart-drawer-open header__cart__wrapper" id="CartButton" title="{{ 'cart.general.title' | t }}">
-            <span class="header__cart__icon__wrapper">
-              <span>{{ 'layout.cart.title' | t }}</span>
-              {% comment %} <span class="oi header__cart__icon" data-glyph="cart"></span> {% endcomment %}
-
-              <span class="cart-count-js header__cart__count">{{ cart.item_count }}</span>
-            </span>
-          </a>
-      {%- endcase -%}
+          <span class="cart-count-js header__cart__count">{{ cart.item_count }}</span>
+        </span>
+      </a>
 
       <a href="javascript:void(0)" class="medium-up--hide toggle-menus">
           <div class="toggle-menus-lines">

@@ -367,40 +367,6 @@
     ]
   },
   {
-    "name" : "Cart",
-    "settings" : [
-      {
-        "type": "select",
-        "id": "cart_type",
-        "label" : {
-          "en" : "type"
-        },
-        "options": [
-         {
-            "value": "page",
-            "label": {
-              "en": "Page"
-            }
-         },
-         {
-           "value": "drawer",
-           "label": {
-             "en": "Drawer"
-           }
-         }
-        ]
-      },
-      {
-        "type" : "checkbox",
-        "id" : "cart_notes",
-        "label" : {
-          "en": "Enable order notes"
-        },
-        "default" : true
-      }
-    ]
-  },
-  {
     "name": "Product grid",
     "settings": [
       {
@@ -555,6 +521,30 @@
             "label": "Dark"
           }
         ]
+      }
+    ]
+  },
+  {
+    "name" : "Popup",
+    "settings" : [
+      {
+        "type" : "checkbox",
+        "id" : "enable_popup_box",
+        "label" : {
+          "en": "Enable"
+        },
+        "default" : true
+      },
+      {
+        "type" : "checkbox",
+        "id" : "popup_test_mode",
+        "label" : {
+          "en": "Test mode"
+        },
+        "info": {
+          "en": "Enable to view popup on each page load"
+        },
+        "default" : false
       }
     ]
   },

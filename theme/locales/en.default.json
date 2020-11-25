@@ -383,6 +383,7 @@
       "total": "Total",
       "subtotal": "Subtotal",
       "remove": "Remove",
+      "update" : "Update",
       "minus": "Minus",
       "plus": "Plus",
       "order_notes": "Leave a note with your order",

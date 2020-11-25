@@ -1,4 +1,3 @@
-
 <div class="section-faqs" id="section_faqs">
   <div class="section_wrapper">
     <div class="faqs">
@@ -41,7 +40,7 @@
 {%- schema -%}
   {
     "name" : {
-      "en": "FAQs"
+      "en": "Customer Care"
     },
     "tag" : "section",
     "settings" : [
@@ -49,7 +48,7 @@
         "type": "text",
         "id": "title",
         "label": {
-          "en": "Title"
+          "en": "Heading"
         }
       }
     ],
@@ -57,30 +56,22 @@
       {
         "type" : "faq",
         "name" : {
-          "en": "FAQ"
+          "en": "FAQ item"
         },
         "settings" : [
           {
             "type": "text",
             "id": "question",
             "label": {
-              "en": "Question"
-            },
-            "info": {
-              "en": "Require"
-            },
-            "default" : "Question content"
+              "en": "Heading"
+            }
           },
           {
             "type" : "textarea",
             "id" : "answer",
             "label" : {
-              "en" : "Answer"
-            },
-            "info": {
-              "en": "Require"
-            },
-            "default" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore minus illum praesentium sed alias quia! Itaque suscipit maxime at quos!"
+              "en" : "Content"
+            }
           }
         ]
       }

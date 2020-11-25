@@ -16,83 +16,84 @@
 {%- endif -%}
 
 {% form 'product', product, class: 'product-form', data-swatches: enable_swatches %}
+  <div class="ro_widget"></div>
   {% unless product.has_only_default_variant %}
     <div class="product__selectors swatch--{{ product.id }}">
 
       {%- if enable_variant_lines -%}
         <!-- /partials/product-variants.liquid -->
 
-{% for option in product.options_with_values %}
-  {%- assign downcased_option = option.name | downcase -%}
-  {%- assign is_color = false -%}
-  {%- if downcased_option contains 'color' or downcased_option contains 'colour' -%}
-    {%- assign is_color = true -%}
-  {%- endif -%}
+        {% for option in product.options_with_values %}
+          {%- assign downcased_option = option.name | downcase -%}
+          {%- assign is_color = false -%}
+          {%- if downcased_option contains 'color' or downcased_option contains 'colour' -%}
+            {%- assign is_color = true -%}
+          {%- endif -%}
 
-  {%- if is_color and enable_swatches -%}
-    <!-- /partials/product-swatch.liquid -->
+          {%- if is_color and enable_swatches -%}
+            <!-- /partials/product-swatch.liquid -->
 
-{%- assign file_extension = 'png' -%}
+        {%- assign file_extension = 'png' -%}
 
-<div class="selector-wrapper selector-wrapper--color js" data-option="option{{ option.position }}">
-  <label class="variant-label" for="SingleOptionSelector-{{ forloop.index0 }}-{{product.id}}">
-    {{ option.name }}
-  </label>
-
-  <fieldset
-    id="SingleOptionSelector-{{ forloop.index0 }}-{{product.id}}"
-    class="variant-input-wrap"
-    data-index="option{{ option.position }}">
-    <div class="swatch clearfix">
-      {% for value in option.values %}
-        <div data-value="{{ value | escape }}" class="swatch-element color {{ value | handle }}">
-          <input
-            id="option-{{ value }}-{{ forloop.index0 }}"
-            type="radio"
-            name="{{ option.name }}"
-            value="{{ value | escape }}"
-            data-single-option-selector
-            data-index="option{{ option.position }}"
-            {% if option.selected_value == value %}checked="checked"{% endif %}>
-          <label class="variant__button-label--color" for="option-{{ value }}-{{ forloop.index0 }}">
-            <span style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }})"></span>
-            <span class="visually-hidden">{{ value }}</span>
+        <div class="selector-wrapper selector-wrapper--color js" data-option="option{{ option.position }}">
+          <label class="variant-label" for="SingleOptionSelector-{{ forloop.index0 }}-{{product.id}}">
+            {{ option.name }}
           </label>
+
+          <fieldset
+            id="SingleOptionSelector-{{ forloop.index0 }}-{{product.id}}"
+            class="variant-input-wrap"
+            data-index="option{{ option.position }}">
+            <div class="swatch clearfix">
+              {% for value in option.values %}
+                <div data-value="{{ value | escape }}" class="swatch-element color {{ value | handle }}">
+                  <input
+                    id="option-{{ value }}-{{ forloop.index0 }}"
+                    type="radio"
+                    name="{{ option.name }}"
+                    value="{{ value | escape }}"
+                    data-single-option-selector
+                    data-index="option{{ option.position }}"
+                    {% if option.selected_value == value %}checked="checked"{% endif %}>
+                  <label class="variant__button-label--color" for="option-{{ value }}-{{ forloop.index0 }}">
+                    <span style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }})"></span>
+                    <span class="visually-hidden">{{ value }}</span>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          </fieldset>
         </div>
-      {% endfor %}
-    </div>
-  </fieldset>
-</div>
 
-  {%- else -%}
-    <div class="selector-wrapper js" data-option="option{{ option.position }}">
-      <label class="variant-label" for="SingleOptionSelector-{{ forloop.index0 }}-{{product.id}}">
-        {{ option.name }}
-      </label>
+      {%- else -%}
+        <div class="selector-wrapper js" data-option="option{{ option.position }}">
+          <label class="variant-label" for="SingleOptionSelector-{{ forloop.index0 }}-{{product.id}}">
+            {{ option.name }}
+          </label>
 
-      <fieldset
-        id="SingleOptionSelector-{{ forloop.index0 }}-{{product.id}}"
-        class="variant-input-wrap"
-        data-index="option{{ option.position }}">
-        {% for value in option.values %}
-          <div class="variant-field">
-            <input
-              id="option-{{ value }}-{{ forloop.index0 }}"
-              class="visually-hidden variant-input"
-              type="radio"
-              name="{{ option.name }}"
-              value="{{ value | escape }}"
-              data-single-option-selector
-              data-index="option{{ option.position }}"
-              {% if option.selected_value == value %}checked="checked"{% endif %}>
-            <label class="variant__button-label" for="option-{{ value }}-{{ forloop.index0 }}">
-              {{ value }}
-            </label>
-          </div>
-        {% endfor %}
-      </fieldset>
-    </div>
-  {%- endif -%}
+          <fieldset
+            id="SingleOptionSelector-{{ forloop.index0 }}-{{product.id}}"
+            class="variant-input-wrap"
+            data-index="option{{ option.position }}">
+            {% for value in option.values %}
+              <div class="variant-field">
+                <input
+                  id="option-{{ value }}-{{ forloop.index0 }}"
+                  class="visually-hidden variant-input"
+                  type="radio"
+                  name="{{ option.name }}"
+                  value="{{ value | escape }}"
+                  data-single-option-selector
+                  data-index="option{{ option.position }}"
+                  {% if option.selected_value == value %}checked="checked"{% endif %}>
+                <label class="variant__button-label" for="option-{{ value }}-{{ forloop.index0 }}">
+                  {{ value }}
+                </label>
+              </div>
+            {% endfor %}
+          </fieldset>
+        </div>
+      {%- endif -%}
 {% endfor %}
 
       {%- else -%}

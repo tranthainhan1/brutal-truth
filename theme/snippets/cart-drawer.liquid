@@ -3,6 +3,7 @@
 {% assign total_t = 'drawer.cart.total' | t %}
 {% assign subtotal_t = 'drawer.cart.subtotal' | t %}
 {% assign remove_t = 'drawer.cart.remove' | t %}
+{% assign update_t = 'drawer.cart.update' | t %}
 {% assign order_notes_t = 'drawer.cart.order_notes' | t %}
 {% assign shipping_taxes_t = 'drawer.cart.shipping_taxes_notification' | t %}
 {% assign continue_t = 'drawer.cart.continue' | t %}
@@ -87,7 +88,7 @@
                     </svg>
                   </a>
                   <input class="cart--quantity--input"type="text"name="updates[]"id="updates_{{ item.id }}"value="{{ item.quantity }}"min="1"pattern="[1-9]*"/>
-                  <a class="plus"tabindex="0"href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1}}">
+                  <a class="plus"tabindex="0" href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1}}" onclick="return false">
                     <svg class="icon-root icon-plus" viewBox="0 0 10 10">
                       <path d="M4.4 4.4V.5h1.2v3.9h3.9v1.2H5.6v3.9H4.4V5.6H.5V4.4h3.9z" fill-rule="nonzero" />
                     </svg>
@@ -97,6 +98,11 @@
                 <div class="cart-item_remove">
                   <a href="/cart/change?line={{ forloop.index }}&quantity=0"class="remove"aria-label="{{ remove_t }}"title="{{ remove_t }}">
                     {{ remove_t }}
+                  </a>
+                </div>
+                <div class="cart-item_update">
+                  <a href="#" onclick="return false" class="update" aria-label="{{ update_t }}"title="{{ update_t }}">
+                    {{ update_t }}
                   </a>
                 </div>
 
@@ -217,10 +223,22 @@
     let btnQtyMinus = $('#cart_drawer .cart-item_quantity .minus');
     let btnQtyPlus = $('#cart_drawer .cart-item_quantity .plus');
 
-    btnQtyMinus.click( function(){
-      $(this).preventDefault();
-      $(this).next().value(function(index,value){
-        console.log(index, value);
+    btnQtyPlus.click( function(e){
+      e.preventDefault();
+      let $this = $(this);
+      let input = $($this.prev()[0]);
+      input.val(function(index, value){
+        return +value + 1
+      })
+    });
+    btnQtyMinus.click( function(e){
+      e.preventDefault();
+
+
+      let input = $($(this).next());
+
+      input.val(function(index,value){
+        return +value > 1 ? +value - 1 : value
       })
     });
     openCartDrawer.click(function(){

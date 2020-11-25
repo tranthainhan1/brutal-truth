@@ -57,7 +57,7 @@
 
           {% when 'linklist' %}
             {% assign linklist = linklists[block.settings.linklist] %}
-            <div class="footer__block grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
+            <div class="footer__block footer-linklist content-{{content_align}} order-{{block_order}} grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
               <h2 class="h5 footer__block__title caps ">{{ linklist.title }} </h2>
 
               <ul class="footer__quicklinks unstyled">
@@ -70,7 +70,7 @@
           {% when 'page' %}
             {% assign page = pages[block.settings.page] %}
             {% if page == blank or page.empty? %}
-              <div class="footer__block grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
+              <div class="footer__block footer-page content-{{content_align}} order-{{block_order}} grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
                 <h2 class="h5 footer__block__title caps">{{ shop.name }}</h2>
 
                 <div class="rte">{{ 'home_page.onboarding.no_content' | t }}</div>
@@ -84,7 +84,7 @@
             {% endif %}
 
           {% when 'social' %}
-            <div class="footer__block grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
+            <div class="footer__block footer-social content-{{content_align}} order-{{block_order}} grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
               {%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Tumblr, YouTube, Vimeo,' | split: ', ' -%}
               <h2 class="h5 footer__block__title caps">{{ block.settings.title | escape }}</h2>
 
@@ -99,14 +99,15 @@
             </div>
 
           {% when 'text' %}
-            <div class="footer__block grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
-              <h2 class="h5 footer__block__title caps">{{ block.settings.title | escape }}</h2>
-
-              <div class="rte">{{ block.settings.text }}</div>
+            <div class="footer__block footer-text content-{{content_align}} order-{{block_order}} grid__item {{ footer_column_width }} text-{{content_align}}" {{ block.shopify_attributes }}>
+              <div class="footer-text__wrapper">
+                <h2 class="h5 footer__block__title caps">{{ block.settings.title | escape }}</h2>
+                <div class="rte">{{ block.settings.text }}</div>
+              </div>
             </div>
 
           {% when 'newsletter' %}
-            <div class="footer__block footer-newsletter grid__item {{ footer_column_width }} content-{{content_align}}" {{ block.shopify_attributes }}>
+            <div class="footer__block footer-newsletter order-{{block_order}}   grid__item {{ footer_column_width }} content-{{content_align}}" {{ block.shopify_attributes }}>
               <h2 class="h5 footer__block__title caps text-{{content_align}}">{{ 'layout.footer.newsletter_title' | t }}</h2>
 
               <div class="rte footer__newsletter__text">
@@ -357,9 +358,9 @@
       }
     },
     {
-      "type" : "checkbox",
-      "id" : "show_copyright",
-      "label" : {
+      "type": "checkbox",
+      "id": "show_copyright",
+      "label": {
         "en": "Show copyright"
       }
     },
@@ -371,7 +372,7 @@
       }
     }
   ],
-  "blocks" : [
+  "blocks": [
     {
       "type": "linklist",
       "name": "Link list",
@@ -379,41 +380,44 @@
         {
           "type": "select",
           "id": "content_align",
-          "label" : {
-            "en" : "Content align"
+          "label": {
+            "en": "Content align"
           },
           "options": [
-           {
+            {
               "value": "left",
               "label": {
                 "en": "Left"
               }
-           },
-           {
-             "value": "center",
-             "label": {
-               "en": "Center"
-             }
-           },
-           {
-             "value": "right",
-             "label": {
-               "en": "Right"
-             }
-           }
+            },
+            {
+              "value": "center",
+              "label": {
+                "en": "Center"
+              }
+            },
+            {
+              "value": "right",
+              "label": {
+                "en": "Right"
+              }
+            }
           ],
-          "default" : "center"
+          "info": {
+            "en": "Only works on large device"
+          },
+          "default": "center"
         },
         {
-          "type" : "range",
+          "type": "range",
           "id": "order",
           "label": {
-            "en" : "Order"
+            "en": "Order"
           },
           "step": 1,
-          "min" : 1,
-          "max" : 4,
-          "default" : 1,
+          "min": 1,
+          "max": 4,
+          "default": 1,
           "info": {
             "en": "Only works on mobile"
           }
@@ -435,47 +439,50 @@
         {
           "type": "paragraph",
           "content": {
-            "en": "Klaviyo: [Sign up](https:\/\/www.klaviyo.com\/register)"
+            "en": "Klaviyo: [Sign up](https://www.klaviyo.com/register)"
           }
         },
-       {
+        {
           "type": "select",
           "id": "content_align",
-          "label" : {
-            "en" : "Content align"
+          "label": {
+            "en": "Content align"
           },
           "options": [
-           {
+            {
               "value": "left",
               "label": {
                 "en": "Left"
               }
-           },
-           {
-             "value": "center",
-             "label": {
-               "en": "Center"
-             }
-           },
-           {
-             "value": "right",
-             "label": {
-               "en": "Right"
-             }
-           }
+            },
+            {
+              "value": "center",
+              "label": {
+                "en": "Center"
+              }
+            },
+            {
+              "value": "right",
+              "label": {
+                "en": "Right"
+              }
+            }
           ],
-          "default" : "center"
+          "info": {
+            "en": "Only works on large device"
+          },
+          "default": "center"
         },
         {
-          "type" : "range",
+          "type": "range",
           "id": "order",
           "label": {
-            "en" : "Order"
+            "en": "Order"
           },
           "step": 1,
-          "min" : 1,
-          "max" : 4,
-          "default" : 1,
+          "min": 1,
+          "max": 4,
+          "default": 1,
           "info": {
             "en": "Only works on mobile"
           }
@@ -487,10 +494,10 @@
           "default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
         },
         {
-          "type" : "textarea",
-          "id" : "newsletter_url",
-          "label" : {
-            "en" : "Newsletter URL"
+          "type": "textarea",
+          "id": "newsletter_url",
+          "label": {
+            "en": "Newsletter URL"
           }
         }
       ]
@@ -502,41 +509,44 @@
         {
           "type": "select",
           "id": "content_align",
-          "label" : {
-            "en" : "Content align"
+          "label": {
+            "en": "Content align"
           },
           "options": [
-           {
+            {
               "value": "left",
               "label": {
                 "en": "Left"
               }
-           },
-           {
-             "value": "center",
-             "label": {
-               "en": "Center"
-             }
-           },
-           {
-             "value": "right",
-             "label": {
-               "en": "Right"
-             }
-           }
+            },
+            {
+              "value": "center",
+              "label": {
+                "en": "Center"
+              }
+            },
+            {
+              "value": "right",
+              "label": {
+                "en": "Right"
+              }
+            }
           ],
-          "default" : "center"
+          "info": {
+            "en": "Only works on large device"
+          },
+          "default": "center"
         },
         {
-          "type" : "range",
+          "type": "range",
           "id": "order",
           "label": {
-            "en" : "Order"
+            "en": "Order"
           },
           "step": 1,
-          "min" : 1,
-          "max" : 4,
-          "default" : 1,
+          "min": 1,
+          "max": 4,
+          "default": 1,
           "info": {
             "en": "Only works on mobile"
           }
@@ -562,41 +572,44 @@
         {
           "type": "select",
           "id": "content_align",
-          "label" : {
-            "en" : "Content align"
+          "label": {
+            "en": "Content align"
           },
           "options": [
-           {
+            {
               "value": "left",
               "label": {
                 "en": "Left"
               }
-           },
-           {
-             "value": "center",
-             "label": {
-               "en": "Center"
-             }
-           },
-           {
-             "value": "right",
-             "label": {
-               "en": "Right"
-             }
-           }
+            },
+            {
+              "value": "center",
+              "label": {
+                "en": "Center"
+              }
+            },
+            {
+              "value": "right",
+              "label": {
+                "en": "Right"
+              }
+            }
           ],
-          "default" : "center"
+          "info": {
+            "en": "Only works on large device"
+          },
+          "default": "center"
         },
         {
-          "type" : "range",
+          "type": "range",
           "id": "order",
           "label": {
-            "en" : "Order"
+            "en": "Order"
           },
           "step": 1,
-          "min" : 1,
-          "max" : 4,
-          "default" : 1,
+          "min": 1,
+          "max": 4,
+          "default": 1,
           "info": {
             "en": "Only works on mobile"
           }
@@ -619,44 +632,47 @@
       "type": "page",
       "name": "Page",
       "settings": [
-          {
+        {
           "type": "select",
           "id": "content_align",
-          "label" : {
-            "en" : "Content align"
+          "label": {
+            "en": "Content align"
           },
           "options": [
-           {
+            {
               "value": "left",
               "label": {
                 "en": "Left"
               }
-           },
-           {
-             "value": "center",
-             "label": {
-               "en": "Center"
-             }
-           },
-           {
-             "value": "right",
-             "label": {
-               "en": "Right"
-             }
-           }
+            },
+            {
+              "value": "center",
+              "label": {
+                "en": "Center"
+              }
+            },
+            {
+              "value": "right",
+              "label": {
+                "en": "Right"
+              }
+            }
           ],
-          "default" : "center"
+          "info": {
+            "en": "Only works on large device"
+          },
+          "default": "center"
         },
         {
-          "type" : "range",
+          "type": "range",
           "id": "order",
           "label": {
-            "en" : "Order"
+            "en": "Order"
           },
           "step": 1,
-          "min" : 1,
-          "max" : 4,
-          "default" : 1,
+          "min": 1,
+          "max": 4,
+          "default": 1,
           "info": {
             "en": "Only works on mobile"
           }

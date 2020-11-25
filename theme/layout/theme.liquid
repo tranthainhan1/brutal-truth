@@ -95,11 +95,10 @@
 
     </main>
   </div>
-  {%- section 'section-popup-box' -%}
-  {% section 'footer' %}
-  {%- if settings.cart_type == 'drawer' -%}
-    {%- render 'cart-drawer'  -%}
+  {%- if settings.enable_popup_box and template.name == 'index' -%}
+    {%- section 'section-popup-box' -%}
   {%- endif -%}
+  {% section 'footer' %}
 
   {%- if template.name == 'article' or template.name == 'blog' -%}
     {% if settings.enable_disqus %}
