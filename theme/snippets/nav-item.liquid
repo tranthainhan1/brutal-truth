@@ -52,43 +52,42 @@
           {%- assign heading = block.settings[heading_key] -%}
           {%- assign button = block.settings[button_key] -%}
           {%- assign image_link = block.settings[link_key] -%}
+          <li class="mega-menu-item">
+            {%- if image != blank or heading != blank or button != blank -%}
+              {%- assign child_count = child_count | plus: 1 -%}
+                <div class="megamenu__image">
+                  {%- capture meganav_image -%}
+                    {%- unless image == blank -%}
+                      <div class="megamenu__image-bg lazyload lazypreload" data-bgset="{% render 'bgset', image: image %}">
+                        <span class="loader">
+                          <div class="loader-indeterminate"></div>
+                        </span>
+                      </div>
+                      <noscript>
+                        <div class="megamenu__image-bg no-js-image" style="background-image: url({{ image | img_url: '1024x' }});"></div>
+                      </noscript>
+                    {%- else -%}
+                      <div class="megamenu__image-bg svg-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+                    {%- endunless -%}
+                  {%- endcapture -%}
 
-          {%- if image != blank or heading != blank or button != blank -%}
-            {%- assign child_count = child_count | plus: 1 -%}
-            <li>
-              <div class="megamenu__image">
-                {%- capture meganav_image -%}
-                  {%- unless image == blank -%}
-                    <div class="megamenu__image-bg lazyload lazypreload" data-bgset="{% render 'bgset', image: image %}">
-                      <span class="loader">
-                        <div class="loader-indeterminate"></div>
-                      </span>
-                    </div>
-                    <noscript>
-                      <div class="megamenu__image-bg no-js-image" style="background-image: url({{ image | img_url: '1024x' }});"></div>
-                    </noscript>
+                  {%- unless image_link == blank -%}
+                    <a href="{{ image_link }}" tabindex="{{ index | plus: 1 }}" class="megamenu__image-link">{{ meganav_image }}</a>
                   {%- else -%}
-                    <div class="megamenu__image-bg svg-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+                    {{ meganav_image }}
                   {%- endunless -%}
-                {%- endcapture -%}
-
-                {%- unless image_link == blank -%}
-                  <a href="{{ image_link }}" tabindex="{{ index | plus: 1 }}" class="megamenu__image-link">{{ meganav_image }}</a>
-                {%- else -%}
-                  {{ meganav_image }}
-                {%- endunless -%}
 
 
-                {%- unless heading == blank -%}
-                  <h3 class="megamenu__image-title"><a href="{% if image_link != blank %}{{ image_link }}{% else %}#{% endif %}" class="megamenu__image-title-link">{{ heading }}</a></h3>
-                {%- endunless -%}
+                  {%- unless heading == blank -%}
+                    <h3 class="megamenu__image-title"><a href="{% if image_link != blank %}{{ image_link }}{% else %}#{% endif %}" class="megamenu__image-title-link">{{ heading }}</a></h3>
+                  {%- endunless -%}
 
-                {%- unless button == blank -%}
-                  <a {% if image_link != blank %} href="{{ image_link }}"{% endif %} class="megamenu__image-btn btn btn--white btn--large btn--secondary btn--neutral caps">{{ button }}</a>
-                {%- endunless -%}
-              </div>
-            </li>
-          {%- endif -%}
+                  {%- unless button == blank -%}
+                    <a {% if image_link != blank %} href="{{ image_link }}"{% endif %} class="megamenu__image-btn btn btn--white btn--large btn--secondary btn--neutral caps">{{ button }}</a>
+                  {%- endunless -%}
+                </div>
+            {%- endif -%}
+          </li>
         {%- endfor -%}
       {%- endcapture -%}
     {%- endif -%}
@@ -96,32 +95,64 @@
   {%- endfor -%}
 {%- endif -%}
 {% comment %} {% if grandparent or has_megamenu %}grandparent kids-{{ child_count }}{% elsif parent %}parent{% else %}child{%endif%} {% endcomment %}
-<li class="parent {% if link.current %}main-menu--active{% endif %}">
-  {% if parent or grandparent or has_megamenu %}
-    <a href="{{link.url}}" onclick="if(window.innerWidth < 750){return false}else{window.location.href = '{{link.url}}' }" class="nav-link" data-aria-toggle aria-haspopup="true" aria-controls="{{ link_id }}" aria-expanded="false">
-      {% comment %} <span class="visually-hidden">+</span> {% endcomment %}
-      {% comment %} {% render 'icon-arrow-right' %} {% endcomment %}
-      {{ link.title | escape }}
-    </a>
 
-    <div class="main-menu-dropdown {% if has_megamenu %}main-menu-dropdown--megamenu{% endif %} {% if parent or grandparent %}main-menu-dropdown--has-links{% endif %}" id="{{ link_id }}">
-      <ul>
-        {%- if has_megamenu -%}
-          {{ megamenu }}
-        {%- endif -%}
+{%- case has_megamenu -%}
+  {%- when true -%}
+    <li class="{% if grandparent or has_megamenu %}grandparent kids-{{ child_count }}{% elsif parent %}parent{% else %}child{%endif%}  {% if link.current %}main-menu--active{% endif %}">
+      {% if parent or grandparent or has_megamenu %}
+        <a href="{{link.url}}" onclick="if(window.innerWidth < 750){return false}else{window.location.href = '{{link.url}}' }" class="nav-link" data-aria-toggle aria-haspopup="true" aria-controls="{{ link_id }}" aria-expanded="false">
+          <span class="visually-hidden">+</span>
+          {% comment %} {% render 'icon-arrow-right' %} {% endcomment %}
+          {{ link.title | escape }}
+        </a>
 
-        {%- if parent or grandparent %}
-          {% for link in link.links %}
-            {%- assign toplevel = false -%}
-            {% render 'nav-item', link: link %}
-          {% endfor %}
-        {% endif %}
-      </ul>
-    </div>
-  {%- else -%}
-    <a href="{{ link.url }}" class="nav-link">
-      {{ link.title | escape }}
-      {% comment %} {% if parent or grandparent or has_megamenu %}<span class="nav-carat-small" tabindex="0">{% render 'icon-arrow-right' %}</span>{% endif %} {% endcomment %}
-    </a>
-  {% endif %}
-</li>
+        <div class="main-menu-dropdown {% if has_megamenu %}main-menu-dropdown--megamenu{% endif %} {% if parent or grandparent %}main-menu-dropdown--has-links{% endif %}" id="{{ link_id }}">
+          <ul>
+            {%- if has_megamenu -%}
+              {{ megamenu }}
+            {%- endif -%}
+
+            {%- if parent or grandparent %}
+              {% for link in link.links %}
+                {%- assign toplevel = false -%}
+                {% render 'nav-item', link: link, sublink: true %}
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+      {%- else -%}
+        <a href="{{ link.url }}" class="nav-link">
+          {{ link.title | escape }}
+          {% if parent or grandparent or has_megamenu %}<span class="nav-carat-small" tabindex="0">{% render 'icon-arrow-right' %}</span>{% endif %}
+        </a>
+      {% endif %}
+    </li>
+  {% comment %} end {% endcomment %}
+
+  {%- when false -%}
+     <li class="parent {% if link.current %}main-menu--active{% endif %} {% unless sublink %} no-mega-menu {%- endunless -%}">
+      {% if parent or grandparent or has_megamenu %}
+        <a href="{{link.url}}" onclick="if(window.innerWidth < 750){return false}else{window.location.href = '{{link.url}}' }" class="nav-link" data-aria-toggle aria-haspopup="true" aria-controls="{{ link_id }}" aria-expanded="false">
+          {% comment %} <span class="visually-hidden">+</span> {% endcomment %}
+          {% comment %} {% render 'icon-arrow-right' %} {% endcomment %}
+          {{ link.title | escape }}
+        </a>
+
+        <div class="main-menu-dropdown {% if parent or grandparent %}main-menu-dropdown--has-links{% endif %}" id="{{ link_id }}">
+          <ul>
+            {%- if parent or grandparent %}
+              {% for link in link.links %}
+                {%- assign toplevel = false -%}
+                {% render 'nav-item', link: link, sublink: true %}
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+      {%- else -%}
+        <a href="{{ link.url }}" class="nav-link">
+          {{ link.title | escape }}
+          {% comment %} {% if parent or grandparent or has_megamenu %}<span class="nav-carat-small" tabindex="0">{% render 'icon-arrow-right' %}</span>{% endif %} {% endcomment %}
+        </a>
+      {% endif %}
+    </li>
+{%- endcase -%}

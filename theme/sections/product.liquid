@@ -55,12 +55,16 @@
 
       <input type="hidden" name="quantity" value="1" aria-label="quantity">
 
+            
       <div class="product__submit" data-product-id="{{ product.id }}">
+
         <div class="product__submit__buttons">
+          <div class="ro_widget"></div>
+
           <button
             type="submit"
             name="add"
-            class="btn product__submit__add"
+            class="btn addtocart product__submit__add"
             data-add-to-cart
             {% unless current_variant.available %}disabled="disabled"{% endunless %}>
             <span data-add-to-cart-text>
