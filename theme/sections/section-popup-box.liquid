@@ -40,12 +40,12 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function(){
+    let popup = $('#popup_box');
+    let closePopup = $('.js-popup-box-close', popup);
 
     if(getCookie('show-popup-box') == null){
-      let popup = $('#popup_box');
       let bodyHeight = document.body.offsetHeight;
       let breakPointShow = bodyHeight / 2;
-      let closePopup = $('.js-popup-box-close', popup);
 
       closePopup.click(function(){
         popup.fadeOut(600);
@@ -63,9 +63,6 @@
         }
       }
     }else if ({{settings.popup_test_mode}}){
-      let popup = $('#popup_box');
-      let closePopup = $('.js-popup-box-close', popup);
-
       closePopup.click(function(){
         popup.fadeOut(600);
          document.documentElement.style.overflow = "";
@@ -73,7 +70,16 @@
       popup.fadeIn(600);
       document.documentElement.style.overflow = "hidden";
     }
-
+    {%- if request.design_mode -%}
+      $("#shopify-section-section-popup-box").on('shopify:section:select', function(e){
+        popup.fadeIn(600);
+        document.documentElement.style.overflow = "hidden";
+      });
+      closePopup.click(function(){
+        popup.fadeOut(600);
+         document.documentElement.style.overflow = "";
+      });
+    {%- endif -%}
   })
 </script>
 

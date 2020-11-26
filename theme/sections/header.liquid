@@ -52,6 +52,37 @@
   {% endif %}
 
   <div class="header__content">
+    {%- if section.settings.show_header_search -%}
+      <!-- /partials/search.liquid -->
+
+      <div class="search">
+        <form class="search__form" method="get" action="{{ routes.search_url }}">
+          <input type="text" name="q"
+            value="{% if search.performed %}{{ search.terms | escape | downcase }}{% endif %}"
+            placeholder="{{ 'general.search.placeholder' | t }}"
+            aria-label="{{ 'general.search.placeholder' | t }}"
+            class="search-query"
+            tabindex="-1">
+          <input type="hidden" name="type" value="product">
+          <a href="#" class="remove-search" tabindex="-1">
+            <span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span>
+          </a>
+        </form>
+
+        <div class="search__results">
+          <div class="search__results-scroller">
+            <div class="search__results-container">
+              <div class="search-outer"></div>
+              <div class="search__results-list product-grid product-grid--results"></div>
+              <div class="loader loader--search">
+                <div class="loader-indeterminate"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    {%- endif -%}
 
     <!-- MAIN NAV -->
     <section id="NavMenus" class="navigation__wrapper" role="navigation">
@@ -118,37 +149,7 @@
     </section>
 
     <div class="wrap">
-      {%- if section.settings.show_header_search -%}
-        <!-- /partials/search.liquid -->
 
-        <div class="search">
-          <form class="search__form" method="get" action="{{ routes.search_url }}">
-            <input type="text" name="q"
-              value="{% if search.performed %}{{ search.terms | escape | downcase }}{% endif %}"
-              placeholder="{{ 'general.search.placeholder' | t }}"
-              aria-label="{{ 'general.search.placeholder' | t }}"
-              class="search-query"
-              tabindex="-1">
-            <input type="hidden" name="type" value="product">
-            <a href="#" class="remove-search" tabindex="-1">
-              <span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span>
-            </a>
-          </form>
-
-          <div class="search__results">
-            <div class="search__results-scroller">
-              <div class="search__results-container">
-                <div class="search-outer"></div>
-                <div class="search__results-list product-grid product-grid--results"></div>
-                <div class="loader loader--search">
-                  <div class="loader-indeterminate"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      {%- endif -%}
       <!-- SEARCH, CURRENCY, ACCOUNT, CART -->
 
       <div class="header-content">
@@ -246,14 +247,6 @@
         </a>
       {% endif %}
 
-      {% if section.settings.show_header_search %}
-        <a href="javascript:void(0)" id="SearchToggle" title="{{ 'general.search.placeholder' | t }}">
-          <span class="search-toggle">
-            <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
-            <span class="oi" data-glyph="magnifying-glass"></span>
-          </span>
-        </a>
-      {% endif %}
       <a href="{{ routes.cart_url }}" class="header__cart__wrapper" id="CartButton" title="{{ 'cart.general.title' | t }}">
         <span class="header__cart__icon__wrapper">
           <span>{{ 'layout.cart.title' | t }}</span>
@@ -262,6 +255,15 @@
           <span class="cart-count-js header__cart__count">{{ cart.item_count }}</span>
         </span>
       </a>
+
+      {% if section.settings.show_header_search %}
+        <a href="javascript:void(0)" id="SearchToggle" title="{{ 'general.search.placeholder' | t }}">
+          <span class="search-toggle">
+            <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
+            <span class="oi" data-glyph="magnifying-glass"></span>
+          </span>
+        </a>
+      {% endif %}
 
       <a href="javascript:void(0)" class="medium-up--hide toggle-menus">
           <div class="toggle-menus-lines">
@@ -413,21 +415,24 @@
       "type": "checkbox",
       "id": "show_header_social",
       "label": "Show social links",
-      "default": true
+      "default": true,
+      "info": {
+        "en": "Not visible on device large"
+      }
     },
     {
       "type": "header",
-      "content": "Search"
+      "content": "Search bar"
     },
     {
       "type": "checkbox",
       "id": "show_header_search",
-      "label": "Show search",
+      "label": "Show search icon",
       "default": true
     },
     {
       "type": "header",
-      "content": "Accout"
+      "content": "Account"
     },
     {
       "type": "checkbox",
