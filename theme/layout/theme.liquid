@@ -66,15 +66,14 @@
   {% if template.directory == 'customers' %}
     <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
   {% endif %}
-
+  <script type="text/javascript">(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/M8quSG3qckRabMps8Bis2981eK9c3UmrKkl0eSkr/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();</script>
   <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
 
   {{ content_for_header }}
 
   {% if settings.enable_yotpo and settings.enable_product_reviews and settings.yotpo_ID != '' %}
     <!-- /partials/yotpo-script.liquid -->
-
-<script type="text/javascript">(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/{{ settings.yotpo_ID }}/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();</script>
+    <script type="text/javascript">(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/M8quSG3qckRabMps8Bis2981eK9c3UmrKkl0eSkr/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();</script>
 
   {% endif %}
 {%- render 'bold-common' -%}
@@ -86,7 +85,7 @@
   <a class="in-page-link visually-hidden skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
 
   <div class="container" data-site-container>
-    {% section 'header' %}
+  {% section 'header' %}
 
     <!-- CONTENT -->
     <main role="main" id="MainContent" class="main-content">

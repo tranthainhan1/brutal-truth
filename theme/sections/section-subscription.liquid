@@ -27,11 +27,12 @@
             </div>
 
             <div class="block_image grid__item {{gridClass}} ">
+            {% comment %} padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}} {% endcomment %}
               {%- if block.settings.image != blank -%}
                 {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                <div class="lazy-image"  style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');">
+                <div class="lazy-image"  style="background-image:  url('{{ block.settings.image | img_url: '1x1' }}');">
                   <img class="lazyload"
-                    style="height: 100%;object-fit: cover;"
+                    style="object-fit: cover;"
                     alt="{{ block.settings.image.alt }}"
                     data-src="{{ img_url }}"
                     data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2450, 2700, 3000, 3350, 3750, 4100]"
@@ -40,7 +41,7 @@
                     data-sizes="auto"/>
                 </div>
                 <noscript>
-                  <div class="no-script" style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');" >
+                  <div class="no-script" style="background-image:  url('{{ block.settings.image | img_url: '1x1' }}');">
                     <img style="width: 100%;height: 100%;" src="{{block.settings.image | img_url: 'master'}}" alt="{{block.settings.image.alt}}">
                   </div>
                 </noscript>
@@ -136,7 +137,7 @@
               {%- assign blocks = section.blocks | where: 'type', 'image-with-text-item'  -%}
 
               {%- for b in blocks -%}
-                <div class="block_item" {{b.shopify_attributes}}>
+                <div class="block_item " {{b.shopify_attributes}}>
                   {%- if b.settings.image -%}
                     {%- assign img_object = b.settings.image -%}
                     {%- assign img_small = b.settings.image | img_url: '18x' -%}
@@ -153,8 +154,8 @@
                   {%- endif -%}
 
                   <div class="index-hero wide-image {{ b.settings.text_color }} {{ b.settings.height }}"
-                    data-section-id="{{ section.id }}"
-                    data-section-type="hero"
+                    {% comment %} data-section-id="{{ section.id }}" {% endcomment %}
+                    {% comment %} data-section-type="hero" {% endcomment %}
                     id="FeaturedImage-{{ section.id }}"
                     {%- if b.settings.parallax -%}
                       data-parallax-src="{{ img_small }}"
@@ -599,7 +600,7 @@
             },
             {
               "value": "four-fifty-height-hero",
-              "label": "450px"
+              "label": "480px"
             },
             {
               "value": "image-height",

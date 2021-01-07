@@ -144,7 +144,7 @@
 
               {%- assign klaviyo_url = block.settings.newsletter_url -%}
               {%- assign klaviyo_id  = block.settings.newsletter_url | split: 'g=' | last -%}
-              {%- assign isPopup = true -%}
+              {% comment %} {%- assign isPopup = true -%} {% endcomment %}
 
               <form action="{{klaviyo_url}}" class="contact-form" target="_blank" novalidate="novalidate">
                 <input type="hidden" name="g" value="{{klaviyo_id}}">

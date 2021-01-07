@@ -20,19 +20,20 @@
     {% comment %}
       Replace the heading deliminator with a string that is highly unlikely to occur naturally [!ヽ(´ー｀)/!]
     {% endcomment %}
-    {%- assign product_description_split = product_description_split | replace: '<h6>', '[!ヽ(´ー｀)/!]' |  replace: '</h6>', '[!ヽ(´ー｀)/!]' | split: '[!ヽ(´ー｀)/!]' -%}
+    {%- assign product_description_split = product_description_split | replace: '<h6', '[!ヽ(´ー｀)/!]' |  replace: '</h6>', '[!ヽ(´ー｀)/!]' | split: '[!ヽ(´ー｀)/!]' -%}
     {%- for item in product_description_split -%}
       {% comment %}
         The zero item is the product description, after that tab headings are odd and contents are even.
       {% endcomment %}
-      {%- assign odd_mod = forloop.index0 | modulo:2 -%}
+      {%- assign odd_mod = forloop.index0 | modulo: 2 -%}
       {%- if odd_mod == 0 -%}
         {%- unless forloop.index0 == 0 -%}
           {%- assign tab_contents = tab_contents | append: item | append: '[!ヽ(´ー｀)/!]' -%}
         {%- endunless -%}
       {%- endif -%}
       {%- if odd_mod == 1 -%}
-        {%- assign tab_headings = tab_headings | append: item | append: '[!ヽ(´ー｀)/!]' -%}
+        {%- assign new_item = item | prepend: '<h6' | strip_html  -%}
+        {%- assign tab_headings = tab_headings | append: new_item | append: '[!ヽ(´ー｀)/!]' -%}
       {%- endif -%}
     {%- endfor -%}
   {%- endif -%}

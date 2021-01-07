@@ -155,12 +155,12 @@
               {%- endif -%}
             {%- endfor -%}
             {%- if has_tabs -%}
-              {%- assign product_description_content = product_description_content | split: '<h6>' | first -%}
+              {%- assign product_description_content = product_description_content | split: '<h6' | first -%}
             {%- endif -%}
 
             <div class="product-description rte">
               {%- if section == nil -%}
-                {{ product.description | split: '<h6>' | first | strip_html | truncatewords: 30, '...' }}
+                {{ product.description | split: '<h6' | first | strip_html | truncatewords: 30, '...' }}
                 <hr />
                 <p>
                   <a href="{{ product.url }}" class="more">{{ 'products.general.view_product' | t }} &rarr;</a>
@@ -204,6 +204,8 @@
       </div>
     </div>
   </div>
+
+  <div class="yotpo yotpo-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}" data-description="{{ product.description | escape }}"></div>
 </div>
 
 {% unless product == empty %}

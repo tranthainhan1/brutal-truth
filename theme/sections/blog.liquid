@@ -109,7 +109,7 @@
       </ul>
     {%- endif -%}
 
-    {% paginate blog.articles by article_limit %}
+    {% paginate blog.articles by 50 %}
       <div class="blog-listing grid grid--uniform" id="BlogLoop">
         {% for article in blog.articles %}
           <article class="article article-grid-item grid__item {{ grid_strings }}">

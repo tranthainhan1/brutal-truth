@@ -367,7 +367,8 @@
       "sign_up": "Sign Up",
       "store_login": "Store Login",
       "newsletter_signup": "Newsletter Signup",
-      "login": "Login"
+      "login": "Login",
+      "view_all": "View All"
     }
   },
   "cart_popover": {
@@ -375,7 +376,7 @@
     "continue_shopping": "Continue Shopping",
     "view_cart": "View Cart"
   },
-  "drawer" : {
+  "drawer": {
     "cart": {
       "your_cart": "Your Cart",
       "price": "Price",
@@ -383,7 +384,7 @@
       "total": "Total",
       "subtotal": "Subtotal",
       "remove": "Remove",
-      "update" : "Update",
+      "update": "Update",
       "minus": "Minus",
       "plus": "Plus",
       "order_notes": "Leave a note with your order",

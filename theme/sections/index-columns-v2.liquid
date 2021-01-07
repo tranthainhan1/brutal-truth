@@ -16,6 +16,7 @@
       {% for block in section.blocks %}
         {%- liquid
           assign bg_color = block.settings.bg_color | default: 'rgba(0,0,0,0)'
+          assign height = block.settings.height | split: ','
         -%}
 
         {% if section.blocks.size == 5 and forloop.index < 3 %}
@@ -120,7 +121,22 @@
             </div>
           </div>
         </div>
-        <style>.index-columns--v2-{{ section.id }} .block-{{block.id}}{--text-color: {{block.settings.text_color}};}</style>
+        <style>.index-columns--v2-{{ section.id }} .block-{{block.id}}{--text-color: {{block.settings.text_color}};}
+          .index-columns--v2-{{ section.id }} .block-{{block.id}} .grid__item__wrapper{
+            height: {{height[0]}}px;
+
+          }
+          @media screen and (max-width: 989.9px){
+            .index-columns--v2-{{ section.id }} .block-{{block.id}} .grid__item__wrapper{
+              height: {{height[1]}}px;
+            }
+          }
+          @media screen and (max-width: 749.9px){
+            .index-columns--v2-{{ section.id }} .block-{{block.id}} .grid__item__wrapper{
+              height: {{height[2]}}px;
+            }
+          }
+        </style>
       {% endfor %}
     </div>
 
@@ -140,6 +156,17 @@
         "type": "text_block",
         "name": "Column",
         "settings": [
+          {
+            "type": "text",
+            "id": "height",
+            "label": {
+              "en": "Height"
+            },
+            "info": {
+              "en": "Please enter only number. E.g: 400,300,200. 400: For device screens large (>990px). 300: For device screens medium (750px ~ 989px). 200: For device screens small (750px<)"
+            },
+            "default" : "400,300,200"
+          },
           {
             "type": "color",
             "id": "text_color",

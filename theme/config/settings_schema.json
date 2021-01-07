@@ -240,6 +240,22 @@
         "id": "animations_enable",
         "label": "Enable animations",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": {
+          "en": "Yotpo"
+        }
+      },
+      {
+        "type": "textarea",
+        "id": "yotpo_review_carousel",
+        "label": {
+          "en": "Review Carousel Code"
+        },
+        "info": {
+          "en": "Please go to Yotpo App > On-site Widgets > Reviews Carousel > Generate Code > Copy and paste here. Note: Click the Change Preview to make sure it's working properly."
+        }
       }
     ]
   },
@@ -525,26 +541,26 @@
     ]
   },
   {
-    "name" : "Popup",
-    "settings" : [
+    "name": "Popup",
+    "settings": [
       {
-        "type" : "checkbox",
-        "id" : "enable_popup_box",
-        "label" : {
+        "type": "checkbox",
+        "id": "enable_popup_box",
+        "label": {
           "en": "Enable"
         },
-        "default" : true
+        "default": true
       },
       {
-        "type" : "checkbox",
-        "id" : "popup_test_mode",
-        "label" : {
+        "type": "checkbox",
+        "id": "popup_test_mode",
+        "label": {
           "en": "Test mode"
         },
         "info": {
           "en": "Enable to view popup on each page load"
         },
-        "default" : false
+        "default": false
       }
     ]
   },

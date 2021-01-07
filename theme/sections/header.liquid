@@ -1,6 +1,6 @@
 <!-- /sections/header.liquid -->
 
-{%- assign logoImageWidth = section.settings.logo_image_width -%}
+{%- assign logoImageWidth = section.settings.logo_image_width | abs -%}
 {%- if section.settings.menu_primary -%}
   {%- assign main_menu_linklist = section.settings.menu_primary-%}
 {%- else -%}
@@ -364,15 +364,11 @@
       }
     },
     {
-      "type": "range",
+      "type": "text",
       "id": "logo_image_width",
       "label": "Logo width (in pixels)",
-      "min": 50,
-      "max": 400,
-      "step": 10,
-      "unit": "px",
-      "info": "To support Retina displays, upload your photo at twice the resolution you would like it to display at, and use this field to adjust it's size on screen.",
-      "default": 200
+      "info": "To support Retina displays, upload your photo at twice the resolution you would like it to display at, and use this field to adjust it's size on screen. Please enter only number.",
+      "default": "187"
     },
     {
       "type": "select",

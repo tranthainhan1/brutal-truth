@@ -14,7 +14,7 @@
               {%- if isRichtext != blank -%}
                 medium--one-whole large-up--one-half
               {%- else -%}
-                medium--one-half large-up--one-half
+                large-up--one-half
               {%- endif -%}
             {%- endcapture -%}
           <div class="block {{isRichtext}} text-with-image grid block-{{block.id}} {%- if block.settings.reverse_order -%} reverse-order {%- endif -%}" {{block.shopify_attributes}}>
@@ -28,9 +28,9 @@
             <div class="block_image grid__item {{gridClass}} ">
               {%- if block.settings.image != blank -%}
                 {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                <div class="lazy-image"  style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');">
+                <div class="lazy-image"  style="background-image:  url('{{ block.settings.image | img_url: '1x1' }}');">
                   <img class="lazyload"
-                    style="height: 100%;object-fit: cover;"
+                    style="object-fit: cover;"
                     alt="{{ block.settings.image.alt }}"
                     data-src="{{ img_url }}"
                     data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2450, 2700, 3000, 3350, 3750, 4100]"
@@ -39,7 +39,7 @@
                     data-sizes="auto"/>
                 </div>
                 <noscript>
-                  <div class="no-script" style="padding-top: {{1 | divided_by: block.settings.image.aspect_ratio | times: 100 | append: '%'}}; background-image:  url('{{ block.settings.image | img_url: '1x1' }}');" >
+                  <div class="no-script" style="background-image:  url('{{ block.settings.image | img_url: '1x1' }}');" >
                     <img style="width: 100%;height: 100%;" src="{{block.settings.image | img_url: 'master'}}" alt="{{block.settings.image.alt}}">
                   </div>
                 </noscript>

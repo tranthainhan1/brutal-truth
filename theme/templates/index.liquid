@@ -1,5 +1,8 @@
 <div class="index-sections">
   {{ content_for_index }}
+  {%- if settings.yotpo_review_carousel != blank -%}
+    {{settings.yotpo_review_carousel}}
+  {%- endif -%}
 </div>
 
 {% if settings.show_promo_modal %}
